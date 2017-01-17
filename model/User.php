@@ -6,12 +6,13 @@ class User extends Model {
     public $hashed_password;
     public $email;
     public $fullName;
-
-    public function __construct($pseudo, $password, $email, $fullName) {
+    public $iduser=-1;
+    public function __construct($pseudo, $password, $email, $fullName,$iduser) {
         $this->pseudo = $pseudo;
         $this->hashed_password = $password;
         $this->email = $email;
         $this->fullName = $fullName;
+        $this->iduser =$iduser;
     }
 
     public static function validate_login($pseudo, $password) {
@@ -29,15 +30,18 @@ class User extends Model {
     private static function check_password($clear_password, $hash) {
         return $hash === Tools::my_hash($clear_password);
     }
-
+     
     public static function get_user($pseudo) {
         $query = self::execute("SELECT * FROM user where pseudo=?", array($pseudo));
         $data = $query->fetch();
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new User($data["pseudo"], $data["password"], $data["email"], $data["full_name"]);
+            return new User($data["pseudo"], $data["password"], $data["email"], $data["full_name"],$data["iduser"]);
         }
+    }
+     public function get_calendar() {
+        return Calendar::get_calendar(($this));
     }
      public static function validate($pseudo, $password, $password_confirm) {
         $errors = [];
@@ -61,7 +65,7 @@ class User extends Model {
     }
      public static function add_user($user) {
         self::execute("INSERT INTO User(pseudo,password,email,full_name)
-                       VALUES(?,?,?,?)", array($user->pseudo, $user->password,$user->email,$user->fullName));
+                       VALUES(?,?,?,?)", array($user->pseudo, $user->hashed_password,$user->email,$user->fullName));
         return true;
     }
 }
