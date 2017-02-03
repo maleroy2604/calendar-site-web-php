@@ -44,8 +44,9 @@ class ControllerMain extends Controller{
             $errors = User::validate($pseudo, $password, $password_confirm);
 
             if (count($errors) == 0) {
-                $user = new User($pseudo, Tools::my_hash($password),$email,$fullname);
+                $user = new User($pseudo, Tools::my_hash($password),$email,$fullname,-1);
                 User::add_User($user);
+                $user = User::get_user($pseudo);
                 $this->log_user($user);
             }
         }

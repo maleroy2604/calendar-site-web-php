@@ -43,6 +43,7 @@ class User extends Model {
      public function get_calendar() {
         return Calendar::get_calendar(($this));
     }
+   
      public static function validate($pseudo, $password, $password_confirm) {
         $errors = [];
         $member = self::get_user($pseudo);
@@ -67,5 +68,11 @@ class User extends Model {
         self::execute("INSERT INTO User(pseudo,password,email,full_name)
                        VALUES(?,?,?,?)", array($user->pseudo, $user->hashed_password,$user->email,$user->fullName));
         return true;
+    }
+    public static function get_id($user){
+        $query=self::execute("SELECT iduser FROM user where pseudo=?", $user->pseudo);
+        $data=$query->fetch();
+        return $data;
+        
     }
 }

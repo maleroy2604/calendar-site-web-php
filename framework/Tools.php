@@ -24,5 +24,11 @@ class Tools {
         $suffix_salt = "QUaLtRs7";
         return md5($prefix_salt . $password . $suffix_salt);
     }
+    
+    public static function dayOfWeek($date){
+        
+        $day=new DateTime($date,new DateTimeZone('Europe/Paris'));
+        return $day->format('D'); 
+    }
 
 }
