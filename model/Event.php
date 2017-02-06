@@ -49,8 +49,19 @@ class Event extends Model{
             $event->whole_day,$event->title, $event->description, $event->idevent));
         
     }
-    public static function get_idcalendar($event){
+    public static function get_events($user){
+        $query =self::execute("SELECT * FROM event where idcalendar in (SELECT  idcalendar FROM calendar where iduser=? )order by start ASC",array($user->iduser));
+        $data=$query->fetchAll();
+        $events=[];
+        foreach($data as $row){
+            $events[]=new Event($row['idevent'],$row['start'],$row['finish'],$row['whole_day'],$row['title'],$row['description'],$row['idcalendar']); 
+        }
         
+        return $events;
+        
+        
+    }
+    public static function get_idcalendar($event){ 
         $query=self::execute("SELECT idcalendar FROM event where idevent=?", array($event->idevent));
         $data=$query->fetch();
         $idcalendar=$data[0];

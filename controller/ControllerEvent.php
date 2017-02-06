@@ -10,24 +10,52 @@ class ControllerEvent extends Controller {
 
     public function index() {
         $user = $this->get_user_or_redirect();
-        $calendar = $user->get_calendar();
-        $idcalendars = [];
-        $events = [];
-        $colors = [];
-        $events = Calendar::get_events();
+        $calendars= $user->get_calendar();
+        $events= Event::get_events($user);
+        $colors=[];
         foreach ($events as $event) {
-            $idcalendars[]= $event->get_idcalendar($event);
+            $idcalendars[] = Event::get_idcalendar($event);
         }
+
         foreach ($idcalendars as $idcalendar) {
-            $colors []= Calendar::get_color($idcalendar);
+            $colors[] = Calendar::get_color($idcalendar);
         }
-        (new View("event"))->show(array("events" => $events, "user" => $user, "calendar" => $calendar, "colors" => $colors));
+        (new View("event"))->show(array("events" => $events, "user" => $user, "colors" => $colors));
     }
 
     public function create() {
         $user = $this->get_user_or_redirect();
         $calendars = $user->get_calendar();
         (new View("create"))->show(array("calendars" => $calendars));
+        
+    }
+
+    public function previous() {
+
+
+
+        $this->redirect("event");
+    }
+
+    public function next() {
+
+        if (isset($_POST["next"])) {
+            $debut = $cpt;
+           
+            for ($i = $debut; $i < sizeof($eventm); ++$i) {
+
+            if ($debut < sizeof($eventm)) {
+                $a = intval(substr(substr($eventm[$i]->dateStart, 0, 10), -2));
+                $b = intval(substr(substr($eventm[$debut]->dateStart, 0, 10), -2) + 5);
+                if ($a < $b) {
+                    $events[] = $eventm[$i];
+                    
+                }
+            }
+        }
+        }
+
+        //$this->redirect("event");
     }
 
     public function add() {
@@ -70,6 +98,7 @@ class ControllerEvent extends Controller {
     public function update() {
 
         if (isset($_POST['update'])) {
+
             $idevent = $_GET["id"];
             $description = '';
             $title = '';

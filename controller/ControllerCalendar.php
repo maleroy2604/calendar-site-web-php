@@ -53,7 +53,8 @@ class ControllerCalendar extends Controller {
 
     public function delete() {
         $idcalendar = $_GET["id"];
-        (new View("delete"))->show(array("idcalendar" => $idcalendar));
+       // (new View("delete"))->show(array("idcalendar" => $idcalendar));
+        (new View("test"))->show(array());
     }
 
     public function remove_calendar() {

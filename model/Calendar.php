@@ -47,7 +47,7 @@ class Calendar extends Model{
      
     public static  function get_event($calendar){
         
-        $query =self::execute("SELECT * FROM event where idcalendar=? group by start ASC",array($calendar->idcalendar));
+        $query =self::execute("SELECT * FROM event where idcalendar=? ",array($calendar->idcalendar));
         $data=$query->fetchAll();
         $events=[];
         foreach($data as $row){
@@ -57,18 +57,7 @@ class Calendar extends Model{
         return $events;
         
     }
-    public static function get_events(){
-        
-         $query =self::execute("SELECT * FROM event group by idevent,start ASC",array());
-        $data=$query->fetchAll();
-        $events=[];
-        foreach($data as $row){
-            $events[]=new Event($row['idevent'],$row['start'],$row['finish'],$row['whole_day'],$row['title'],$row['description'],$row['idcalendar']); 
-        }
-        
-        return $events;
-        
-    }
+   
      public static  function validate($description){
          $errors=[];
             if ($description==''){
