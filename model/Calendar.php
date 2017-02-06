@@ -1,6 +1,6 @@
 <?php
 require_once "framework/Model.php";
-
+require_once 'model/Event.php';
 class Calendar extends Model{
 
     public $description;
@@ -29,13 +29,16 @@ class Calendar extends Model{
         
     }
     public static function add_calendar($calendar) {
+       
         self::execute("INSERT INTO Calendar(description,color,iduser)
                        VALUES(?,?,?)", array($calendar->description, substr($calendar->color,1),$calendar->iduser));
+        
         return true;
     }
    
     public static function delete_calendar($idcalendar){
-        self::execute("DELETE from calendar where idcalendar=?" ,array($idcalendar));
+         Event::delete_all($idcalendar);
+        self::execute(" DELETE from calendar where idcalendar=?" ,array($idcalendar));
         return true;
     }
     public static function update_calendar($calendar){
@@ -47,7 +50,7 @@ class Calendar extends Model{
      
     public static  function get_event($calendar){
         
-        $query =self::execute("SELECT * FROM event where idcalendar=? ",array($calendar->idcalendar));
+        $query =self::execute("SELECT * FROM event where idcalendar=?",array($calendar->idcalendar));
         $data=$query->fetchAll();
         $events=[];
         foreach($data as $row){
@@ -57,20 +60,12 @@ class Calendar extends Model{
         return $events;
         
     }
-   
      public static  function validate($description){
          $errors=[];
             if ($description==''){
                 $erros=" la description ne doit pas etre un champs vide !";
             }
          return $errors;
-     }
-     public static function get_color($idcalendar){
-             $query =self::execute("SELECT color FROM calendar where idcalendar=?",array($idcalendar));
-             $data=$query->fetch();
-             $color=$data[0];
-             return $color;
-         
      }
     
    

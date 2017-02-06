@@ -43,7 +43,6 @@ class User extends Model {
      public function get_calendar() {
         return Calendar::get_calendar(($this));
     }
-   
      public static function validate($pseudo, $password, $password_confirm) {
         $errors = [];
         $member = self::get_user($pseudo);

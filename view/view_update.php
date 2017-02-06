@@ -8,16 +8,17 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
+        <?php include('menu.html'); ?>
         <div class="title">Update event </div>
         <div class="main">
 
             <br><br>
 
             <table>
-                <form id="createEvent" action="event/update/<?= $idevent ?>" method="post">
+                <form id="updateEvent" action="Event/update/<?= $event->idevent ?>" method="post">
                     <tr>
                         <td>Title:</td>
-                        <td><input id="title" name="title" type="text"  value=""></td>
+                        <td><input id="title" name="title" type="text"  value="<?= $event->title ?>"></td>
 
                     </tr>
                     <tr>
@@ -32,37 +33,35 @@
                     </tr>
                     <tr>
                         <td>Description :</td>
-                        <td><textarea id="description " name="description"  type="text" value="" rows="3"></textarea></td>
+                        <td><textarea id="description " name="description"  type="text"  rows="3"><?= $event->description ?></textarea></td>
 
                     </tr>
                     <tr>
                         <td>Start time :</td>
-                        <td><input id="startTime" name="start" type="datetime-local"  value=""></td>
+
+                        <td><input id="startTime" name="start" type="datetime-local"  value="<?= Tools::dateHtml($event->dateStart) ?>"></td>
                         <td class="errors" id="errStart"></td>
                     </tr>
                     <tr>
 
                         <td>Finish time :</td>
-                        <td><input id="finishTime" name="finish" type="datetime-local"  value=""></td>
+                        <td><input id="finishTime" name="finish" type="datetime-local"  value="<?= Tools::dateHtml($event->dateFinish) ?>"></td>
 
                     </tr>
                     <tr>
                         <td>
 
-                            <input id="wholeDay" type="checkbox" name="wholeday">
+                            <input id="wholeDay" type="checkbox" name="wholeday" <?= ($event->whole_day ? ' checked' : '') ?> value='<?= $event->whole_day ?>'>
                             <label for="wholeDay"> whole day event </label>
                         </td>
                     </tr>
-
                     <tr>
-                        <td>
-                            <input de type="submit" name="update" value="Update">
+                        <td><input id="btn" type="submit" value="Update"></td>
                 </form>
 
-                </td>
                 <td>
 
-                    <form id="cancelEvent" action="event/index" method="post">
+                    <form id="cancelEvent" action="Event/cancel" method="post">
                         <input id="btn" type="submit" value="Cancel">
                     </form>
 
@@ -70,11 +69,12 @@
 
 
                 <td>
-                    <form id="deleteEvent" action="event/deletevent/<?= $idevent ?>" method="post">
-                        <input id="btn" type="submit" value="delete">
-                    </form>
+                    <form id="cancelEvent" action="Event/delete/<?= $event->idevent ?>" method="post"><input id="btn" type="submit" value="delete"></form>
+
+
                 </td>
                 </tr>
+
 
             </table>
         </div>
