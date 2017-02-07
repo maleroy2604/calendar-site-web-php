@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/Calendar.php';
+require_once 'model/Event.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 require_once 'model/User.php';
@@ -53,7 +54,9 @@ class ControllerCalendar extends Controller {
 
     public function delete() {
         $idcalendar = $_GET["id"];
-        (new View("delete"))->show(array("idcalendar" => $idcalendar));
+        
+       (new View("delete"))->show(array("idcalendar" => $idcalendar));
+        
     }
 
     public function remove_calendar() {
@@ -61,6 +64,7 @@ class ControllerCalendar extends Controller {
             $this->redirect("calendar");
         } else if (isset($_POST['confirm'])) {
             $idcalendar = $_GET["id"];
+            Event::delete_events($idcalendar);
             Calendar::delete_calendar($idcalendar);
             $this->redirect("calendar");
         }

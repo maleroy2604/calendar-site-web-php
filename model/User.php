@@ -6,7 +6,7 @@ class User extends Model {
     public $hashed_password;
     public $email;
     public $fullName;
-    public $iduser=-1;
+    public $iduser;
     public function __construct($pseudo, $password, $email, $fullName,$iduser) {
         $this->pseudo = $pseudo;
         $this->hashed_password = $password;
@@ -43,6 +43,7 @@ class User extends Model {
      public function get_calendar() {
         return Calendar::get_calendar(($this));
     }
+   
      public static function validate($pseudo, $password, $password_confirm) {
         $errors = [];
         $member = self::get_user($pseudo);

@@ -8,40 +8,43 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-               
-        <?php include('menu.html'); ?>
+        <?php include('menu.html');?>
+        
         <table id="message_list" class="message_list">
             <tr>
-                <th><form id="previous" action="Event/index/" method="post"><input type='submit' value='<<Previous week'></form></th>
-                <th><h1>My planning</h1><br>from 12/12/16 to 18/12/16 </th>
-                <th><form id="next" action="Event/index/" method="post"><input type='submit' value='Next week>>'></form></th>
+                <th><form id="previous" action="event/previous" method="post"><input type='submit' name="previous" value='<<Previous week'></form></th>
+                <th><h1>My planning</h1><br>from .... to ....</th>
+                <th><form id="next" action="event/index" method="post"><input type='submit' name="next" value='Next week>>'></form></th>
 
             </tr>
-            <?php foreach ($events as $event ): ?>
-                        
-
-
+            <?php 
+              
+            for($i=0; $i< sizeof($events); ++$i): 
+                ?>
                 <tr>
-                    <td><?= Tools::dayOfWeek($event->dateStart) ?> <?= substr($event->dateStart, 0, 10) ?>  </td>
+                    <td><?= Tools::dayOfWeek($events[$i]->dateStart) ?> <?= substr($events[$i]->dateStart, 0, 10) ?>  </td>
                 </tr>
                 <tr>
                     <td>
-                        <?php if ($event->whole_day == 1): ?>
+                        <?php if ($events[$i]->whole_day == 1): ?>
                             <p>All day</p>
 
                         <?php else : ?>
-                            <p><?= substr($event->dateStart, 10) ?> >> </p>
+                            <p><?= substr($events[$i]->dateStart, 10) ?> >> </p>
                         <?php endif; ?>
                     </td>
                     <td>
-                        <p style="color:<?= $calendar->color ?>"> <?= $event->title ?> </p>
+                        
+                        <p style="color:#<?= $colors[$i] ?>"> <?= $events[$i]->title ?> </p>
+                         
                     </td>
                     <td>
-                         <form id="EditEvent" action="Event/edit/<?= $event->idevent ?>" methode="post"><input type="submit" value="Edite event"></form>
+                         <form id="EditEvent" action="event/edit/<?= $events[$i]->idevent ?>" methode="post"><input type="submit" value="Edite event"></form>
                     </td>
                 </tr>
+               
 
-            <?php endforeach; ?>
+            <?php endfor; ?>
                 <tr>
                     <td></td>
                     <td> <form id="newEvent" action="event/create" methode="post"><input type="submit" value="New event"></form></td>

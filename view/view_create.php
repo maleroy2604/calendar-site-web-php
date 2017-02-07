@@ -9,7 +9,6 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <?php include('menu.html'); ?>
         <div class="title">Create event </div>
         <div class="main">
 
@@ -65,16 +64,12 @@
 
 
                         <td>
-
-
-
+                            <form id="cancelEvent" action="Event/index" method="post">
+                                <input id="btn" type="submit" value="Cancel">
+                            </form>
                         </td>
+                    </tr>
                 </form>
-                <td>
-                    <form id="cancelEvent" action="Event/cancel" method="post">
-                        <input id="btn" type="submit" value="Cancel">
-                    </form></td>
-                </tr>
 
             </table>
 

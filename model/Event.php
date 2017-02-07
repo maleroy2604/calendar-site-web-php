@@ -30,7 +30,7 @@ class Event extends Model{
         $dat1= new DateTime(trim($start), new DateTimeZone('Europe/paris'));
         $dat2= new DateTime(trim($finish), new DateTimeZone('Europe/paris'));
         if($title==''){
-            $errors[]="le titre est obligatoire ! ";
+            $errors[]="le titre est obligatoir ! ";
         }
         if($description==''){
             $errors[]=" la description est obligatoire !";
@@ -46,31 +46,42 @@ class Event extends Model{
      public static function update_event($event){
         
         self::execute("UPDATE event SET start=? ,finish=?, whole_day=?,title=? ,description=? where idevent=?",array($event->dateStart,$event->dateFinish,
-            $event->whole_day,$event->title, $event->description,$event->idevent));
+            $event->whole_day,$event->title, $event->description, $event->idevent));
         
     }
-    public static function delete_all($idcalendar){
-        self::execute("DELETE from event where idcalendar=?",array($idcalendar));
+    public static function get_events($user){
+        $query =self::execute("SELECT * FROM event where idcalendar in (SELECT  idcalendar FROM calendar where iduser=? )order by start ASC",array($user->iduser));
+        $data=$query->fetchAll();
+        $events=[];
+        foreach($data as $row){
+            $events[]=new Event($row['idevent'],$row['start'],$row['finish'],$row['whole_day'],$row['title'],$row['description'],$row['idcalendar']); 
+        }
+        return $events; 
     }
-    public static  function get_event($idevent){
-        
-        $query =self::execute("SELECT * FROM event where idevent=?",array($idevent));
-        $row=$query->fetch();
-        
-        $event=new Event($idevent,$row['start'],$row['finish'],$row['whole_day'],$row['title'],$row['description'],$row['idcalendar']);
-        return $event;
-    }
+   
     
-    public static function delete_event($idevent){
-        self::execute("DELETE from event where idevent=?" ,array($idevent));
-        return true;
-    }
-    public static function get_idcalendar($idevent){
-        
-        $query=self::execute("SELECT idcalendar FROM event where idevent=?", array($idevent));
+    public static function get_idcalendar($event){ 
+        $query=self::execute("SELECT idcalendar FROM event where idevent=?", array($event->idevent));
         $data=$query->fetch();
         $idcalendar=$data[0];
         return $idcalendar;
        
     }
+    public static function delete_event($idevent){
+        self::execute("DELETE from event where idevent=?" ,array($idevent));
+        return true;
+    }
+     public static function delete_events($idcalendar){
+        self::execute("DELETE from event where idcalendar=?" ,array($idcalendar));
+        return true;
+     }
+      public static function get_event($idevent){
+        $query =self::execute("SELECT * FROM event where idevent=?",array($idevent));
+        $row=$query->fetch();
+        $event=new Event($idevent,$row['start'],$row['finish'],$row['whole_day'],$row['title'],$row['description'],$row['idcalendar']); 
+        
+        return $event; 
+    }
+    
 }
+     

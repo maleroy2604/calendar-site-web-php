@@ -1,2 +1,0 @@
-pseudo: ant
-mdp:EPFC?666
