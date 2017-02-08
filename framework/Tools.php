@@ -30,11 +30,24 @@ class Tools {
         $day = new DateTime($date, new DateTimeZone('Europe/Paris'));
         return $day->format('D');
     }
-    public static function dateHtml($date){
-        $datehtml=  substr_replace($date,"T",10,1);
-        return $datehtml;
+
+    public static function day($annee, $semaine) {
+        $lundi = new DateTime();
+        $lundi->setISOdate($annee, $semaine);
+        $result = $lundi->format('d M Y');
+        return $result;
     }
 
-   
+    public static function lastDay($annee, $numSem) {
+        $lastDay = new DateTime();
+        $lastDay->setISOdate($annee, $numSem,7);
+        $result=$lastDay->format('d M Y');
+        return $result;
+    }
+
+    public static function dateHtml($date) {
+        $datehtml = substr_replace($date, "T", 10, 1);
+        return $datehtml;
+    }
 
 }

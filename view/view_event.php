@@ -8,18 +8,17 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <?php include('menu.html');?>
-        
+        <?php include('menu.html'); ?>
+
         <table id="message_list" class="message_list">
             <tr>
-                <th><form id="previous" action="event/previous" method="post"><input type='submit' name="previous" value='<<Previous week'></form></th>
-                <th><h1>My planning</h1><br>from .... to ....</th>
-                <th><form id="next" action="event/index" method="post"><input type='submit' name="next" value='Next week>>'></form></th>
+                <th><form id="previous" action="event/index/<?= $numSem ?>" method="post"><input type='submit' name="previous" value='<<Previous week'></form></th>
+                <th><h1>My planning</h1><br>From &nbsp;&nbsp; <?= $day ?>&nbsp;&nbsp;to&nbsp;&nbsp;<?= $lastDay ?></th>
+                <th><form id="next" action="event/index/<?= $numSem ?>" method="post"><input type='submit' name="next" value='Next week>>'></form></th>
 
             </tr>
-            <?php 
-              
-            for($i=0; $i< sizeof($events); ++$i): 
+            <?php
+            for ($i = 0; $i < sizeof($events); ++$i):
                 ?>
                 <tr>
                     <td><?= Tools::dayOfWeek($events[$i]->dateStart) ?> <?= substr($events[$i]->dateStart, 0, 10) ?>  </td>
@@ -34,27 +33,27 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        
+
                         <p style="color:#<?= $colors[$i] ?>"> <?= $events[$i]->title ?> </p>
-                         
+
                     </td>
                     <td>
-                         <form id="EditEvent" action="event/edit/<?= $events[$i]->idevent ?>" methode="post"><input type="submit" value="Edite event"></form>
+                        <form id="EditEvent" action="event/edit/<?= $events[$i]->idevent ?>" methode="post"><input type="submit" value="Edite event"></form>
                     </td>
                 </tr>
-               
+
 
             <?php endfor; ?>
-                <tr>
-                    <td></td>
-                    <td> <form id="newEvent" action="event/create" methode="post"><input type="submit" value="New event"></form></td>
-                    <td></td>
-                </tr>
+            <tr>
+                <td></td>
+                <td> <form id="newEvent" action="event/create" methode="post"><input type="submit" value="New event"></form></td>
+                <td></td>
+            </tr>
 
 
 
         </table>
-       
+
 
     </body>
 </html>
