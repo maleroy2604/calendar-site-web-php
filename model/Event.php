@@ -71,9 +71,9 @@ class Event extends Model{
         self::execute("DELETE from event where idevent=?" ,array($idevent));
         return true;
     }
-     public static function delete_events($idcalendar){
-        self::execute("DELETE from event where idcalendar=?" ,array($idcalendar));
-        return true;
+     public  static function delete_events($calendar){
+        self::execute("DELETE from event where idcalendar=?" ,array($calendar->idcalendar));
+        
      }
       public static function get_event($idevent){
         $query =self::execute("SELECT * FROM event where idevent=?",array($idevent));

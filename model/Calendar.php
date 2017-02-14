@@ -16,32 +16,32 @@ class Calendar extends Model{
       
     }
 
-    public static function get_calendar($user) {
-        
-        $query = self::execute("SELECT * FROM calendar where iduser= :iduser", array("iduser"=>$user->iduser));
-        $data = $query->fetchAll();
-        $calendars=[];
-         foreach ($data as $row) {
-            $calendars[] = new Calendar($row['description'],"#".$row['color'],$row['iduser'],$row['idcalendar']);
-        }
-       
-        return $calendars;
-        
-    }
-    public static function add_calendar($calendar) {
+   
+    public function add() {
         self::execute("INSERT INTO Calendar(description,color,iduser)
-                       VALUES(?,?,?)", array($calendar->description, substr($calendar->color,1),$calendar->iduser));
-        return true;
+                       VALUES(?,?,?)", array($this->description, substr($this->color,1),$this->iduser));
+        
     }
    
     public static function delete_calendar($idcalendar){
+        Event::delete_events($idcalendar);
         self::execute("DELETE from calendar where idcalendar=?" ,array($idcalendar));
         return true;
     }
-    public static function update_calendar($calendar){
+    
+    public function delete(){
+        $this->delete_all_events();
         
-        self::execute("UPDATE calendar SET description=?, color=? where idcalendar=?",array($calendar->description,
-            substr($calendar->color,1),$calendar->idcalendar));
+        self::execute("DELETE from calendar where idcalendar=?" ,array($this->idcalendar));
+    }
+    public function delete_all_events(){
+        Event::delete_events($this);
+        
+    }
+    public function update(){
+        
+        self::execute("UPDATE calendar SET description=?, color=? where idcalendar=?",array($this->description,
+            substr($this->color,1),$this->idcalendar));
         
     }
      
@@ -72,7 +72,16 @@ class Calendar extends Model{
              return $color;
          
      }
-    
+    public static function get($user){
+         $query = self::execute("SELECT * FROM calendar where iduser=?", array($user->iduser));
+        $data = $query->fetchAll();
+        $calendars=[];
+         foreach ($data as $row) {
+            $calendars[] = new Calendar($row['description'],"#".$row['color'],$row['iduser'],$row['idcalendar']);
+        }
+       
+        return $calendars;
+    }
    
     
    

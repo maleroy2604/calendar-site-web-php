@@ -1,5 +1,7 @@
 <?php
+
 require_once "framework/Model.php";
+
 class User extends Model {
 
     public $pseudo;
@@ -7,12 +9,13 @@ class User extends Model {
     public $email;
     public $fullName;
     public $iduser;
-    public function __construct($pseudo, $password, $email, $fullName,$iduser) {
+
+    public function __construct($pseudo, $password, $email, $fullName, $iduser) {
         $this->pseudo = $pseudo;
         $this->hashed_password = $password;
         $this->email = $email;
         $this->fullName = $fullName;
-        $this->iduser =$iduser;
+        $this->iduser = $iduser;
     }
 
     public static function validate_login($pseudo, $password) {
@@ -22,31 +25,45 @@ class User extends Model {
             if (!self::check_password($password, $user->hashed_password)) {
                 $error = "Wrong password. Please try again.";
             }
-        }else {
+        } else {
             $error = "can't find a user Please sign up. ";
         }
         return $error;
     }
+
     private static function check_password($clear_password, $hash) {
         return $hash === Tools::my_hash($clear_password);
     }
-     
+
     public static function get_user($pseudo) {
         $query = self::execute("SELECT * FROM user where pseudo=?", array($pseudo));
         $data = $query->fetch();
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new User($data["pseudo"], $data["password"], $data["email"], $data["full_name"],$data["iduser"]);
+            return new User($data["pseudo"], $data["password"], $data["email"], $data["full_name"], $data["iduser"]);
         }
     }
-     public function get_calendar() {
-        return Calendar::get_calendar(($this));
+
+    public static function get_mail($mail) {
+        $query = self::execute("SELECT * FROM user where email=?", array($mail));
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
+
    
-     public static function validate($pseudo, $password, $password_confirm) {
+
+    public static function validate($pseudo, $password, $password_confirm, $email) {
         $errors = [];
         $member = self::get_user($pseudo);
+        $mail = self::get_mail($email);
+        if ($mail) {
+            $errors[] = "This email already exists.";
+        }
         if ($member) {
             $errors[] = "This user already exists.";
         } if ($pseudo == '') {
@@ -64,15 +81,35 @@ class User extends Model {
         }
         return $errors;
     }
-     public static function add_user($user) {
+
+    public static function add_user($user) {
         self::execute("INSERT INTO User(pseudo,password,email,full_name)
-                       VALUES(?,?,?,?)", array($user->pseudo, $user->hashed_password,$user->email,$user->fullName));
+                       VALUES(?,?,?,?)", array($user->pseudo, $user->hashed_password, $user->email, $user->fullName));
         return true;
     }
-    public static function get_id($user){
-        $query=self::execute("SELECT iduser FROM user where pseudo=?", $user->pseudo);
-        $data=$query->fetch();
+
+    public function get_id() {
+        $query = self::execute("SELECT iduser FROM user where pseudo=?", $this->pseudo);
+        $data = $query->fetch();
         return $data;
+    }
+     public  function get_calendar() {
+        
+        Calendar::get($this);
+       
         
     }
+    public  function delete_calendar($calendar){
+        $calendar->delete();
+    }
+    public function add_calendar($calendar){
+        $calendar->add();
+    }
+    public function update_calendar($calendar){
+        $calendar->update();
+    }
+    public function get_events(){
+        Event::get_events($this);
+    }
+
 }

@@ -12,7 +12,7 @@ class ControllerEvent extends Controller {
         date_default_timezone_set('UTC');
         $user = $this->get_user_or_redirect();
         $calendars= $user->get_calendar();
-        $eventm= Event::get_events($user);
+        $eventm= $user->get_events();
         $colors=[];
         $idcalendars=[];
         $events=[];
