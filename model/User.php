@@ -95,7 +95,7 @@ class User extends Model {
     }
      public  function get_calendar() {
         
-        Calendar::get($this);
+        return Calendar::get($this);
        
         
     }
@@ -109,7 +109,7 @@ class User extends Model {
         $calendar->update();
     }
     public function get_events(){
-        Event::get_events($this);
+        return Event::get_events($this);
     }
 
 }

@@ -12,9 +12,9 @@
 
         <table id="message_list" class="message_list">
             <tr>
-                <th><form id="previous" action="event/index/<?= $numSem ?>" method="post"><input type='submit' name="previous" value='<<Previous week'></form></th>
+                <th><form id="previous" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem"value='<?= $numSem ?>'><input type='submit' name="previous" value='<<Previous week'></form></th>
                 <th><h1>My planning</h1><br>From &nbsp;&nbsp; <?= $day ?>&nbsp;&nbsp;to&nbsp;&nbsp;<?= $lastDay ?></th>
-                <th><form id="next" action="event/index/<?= $numSem ?>" method="post"><input type='submit' name="next" value='Next week>>'></form></th>
+                <th><form id="next" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem"value='<?= $numSem ?>'><input type='submit' name="next" value='Next week>>'></form></th>
 
             </tr>
             <?php
@@ -33,7 +33,7 @@
                         <?php endif; ?>
                     </td>
                     <td>
-
+                       <?= print_r($colors[$i]); ?>
                         <p style="color:#<?= $colors[$i] ?>"> <?= $events[$i]->title ?> </p>
 
                     </td>

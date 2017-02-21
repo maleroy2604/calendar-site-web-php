@@ -10,7 +10,7 @@ class ControllerCalendar extends Controller {
 
     public function index() {
         $user = $this->get_user_or_redirect();
-        if (isset($_POST['color']) && isset($_POST['description']) && $_POST['description'] != '') {
+        if (isset($_POST['color']) && isset($_POST['description']) ) {
             $this->add();
         }
         $calendars = $user->get_calendar();
@@ -25,23 +25,23 @@ class ControllerCalendar extends Controller {
         $user = $this->get_user_or_redirect();
         $color = $_POST['color'];
         $description = $_POST['description'];
-        $errors = calendar:: validate($description);
-        if (count($errors) == 0) {
+        
+         if ((isset($_POST['description'])=='' || isset($_POST['description'])) && isset($_POST['color'])) {
             $calendar = new Calendar($description, $color, $user->iduser, $idcalendar);
-            $user->update($calendar);
+          
+            $user->update_calendar($calendar);
 
             $this->redirect("calendar");
-        }
+         }
     }
 
     public function add() {
         $description = '';
         $color = '';
         $errors = [];
-        if (isset($_POST['description']) && isset($_POST['color'])) {
+        if ((isset($_POST['description'])=='' || isset($_POST['description'])) && isset($_POST['color'])) {
             $description = $_POST['description'];
             $color = $_POST['color'];
-            $errors = calendar:: validate($description);
             $user = $this->get_user_or_redirect();
             if (count($errors) == 0) {
                 $calendar = new Calendar($description, $color, $user->iduser, -1);

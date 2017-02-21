@@ -46,7 +46,7 @@
 
                         <tr>
                         <form id="calendar_id" action="calendar/index" method="post">
-                            <td><input id="description" type="text" name="description"  value="enter description"></td>
+                            <td><input id="description" type="text" name="description"  value=""></td>
                             <td><input id="color" type="color" name="color" value="color"></td>
                             <td> <input id="post" type='submit' value='add calendar'></td>
                         </form>

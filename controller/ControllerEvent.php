@@ -5,75 +5,81 @@ require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 require_once 'model/User.php';
 require_once 'model/Event.php';
-
+require_once 'lib/MyTools.php';
 class ControllerEvent extends Controller {
 
     public function index() {
         date_default_timezone_set('UTC');
         $user = $this->get_user_or_redirect();
-        $calendars= $user->get_calendar();
-        $eventm= $user->get_events();
-        $colors=[];
-        $idcalendars=[];
-        $events=[];
-        
+
+        $eventm = $user->get_events();
+        $colors = [];
+
+        $events = [];
        
+        
+
         foreach ($eventm as $event) {
-            $idcalendars[] = Event::get_idcalendar($event);
+            $colors[] = $event->get_color();
         }
-        foreach ($idcalendars as $idcalendar) {
-            $colors[] = Calendar::get_color($idcalendar);
+
+        if (isset($_POST['numSem'])) {
+            $numSem = (int) $_POST['numSem'];
+        } else {
+            $numSem = (int) date('W');
         }
-         if(isset($_GET['id'])&& is_numeric($_GET['id'])){
-                $numSem=(int)$_GET['id'];
-            }
-            else{
-                $numSem=(int)date('W');
-            }
-        if(isset($_POST['next'])&& isset($_GET['id']) && is_numeric($_GET['id'])){
-                $numSem=(int)$_GET['id'];
+         if (isset($_POST['annee'])) {
+            $annee = (int) $_POST['annee'];
+        } else {
+            $annee = (int) date('Y');
+        }
+       
+        if (isset($_POST['next']) && isset($_POST['numSem']) ) {
+            $numSem = (int) $_POST['numSem'];
+            
+            if($numSem <= MyTools::lastWeekNumberOfYear($annee))
                 ++$numSem;
+            else {
+                $numSem=1;
+                ++$annee;
+            }
         }
-         if(isset($_POST['previous'])&& isset($_GET['id']) && is_numeric($_GET['id'])){
-                $numSem=(int)$_GET['id'];
-                if($numSem>1){
+        
+        if (isset($_POST['previous']) && isset($_POST['numSem']) ) {
+            $numSem = (int) $_POST['numSem'];
+            if ($numSem == 1) {
+                --$annee;
+                $numSem=MyTools::lastWeekNumberOfYear($annee);
+                
+            }else{
                 --$numSem;
-                }
+            }
         }
-        $day= Tools::day(2017, $numSem);
-        $lastDay = Tools::lastDay(2017, $numSem);
-       
-       
-        
+        $day = MyTools::day($annee, $numSem);
+        $lastDay =MyTools::lastDay($annee, $numSem);
+
+     
 
 
-       
-        foreach($eventm as $eventx){
-            
+
+
+        foreach ($eventm as $eventx) {
+
             $numSemainEvent = date('W', strtotime($eventx->dateStart));
-           
-            if ($numSemainEvent==$numSem){
-                $events[]=$eventx;
-            } 
+
+            if ($numSemainEvent == $numSem) {
+                $events[] = $eventx;
+            }
         }
-            (new View("event"))->show(array("events" => $events, "user" => $user, "colors" => $colors,"numSem"=>$numSem,"day"=>$day,"lastDay"=>$lastDay));
-        
-        }
-        
-            
-               
-            
-            
-            
-        
+        (new View("event"))->show(array("events" => $events, "user" => $user, "colors" => $colors, "numSem" => $numSem, "day" => $day, "annee"=>$annee,"lastDay" => $lastDay));
+    }
+
     public function create() {
         $user = $this->get_user_or_redirect();
         $calendars = $user->get_calendar();
         (new View("create"))->show(array("calendars" => $calendars));
-        
     }
-    
-    
+
     public function add() {
         $idcalendar = '';
         $description = '';
@@ -99,20 +105,19 @@ class ControllerEvent extends Controller {
             if (count($errors) == 0) {
                 $event = new Event(-1, $start, $finish, $wholeday, $title, $description, $idcalendar);
                 Event::add_Event($event);
-                 $this->redirect("event");
-            }else{
-                (new View("error"))->show(array("errors"=>$errors));
+                $this->redirect("event");
+            } else {
+                (new View("error"))->show(array("errors" => $errors));
             }
         }
-       
     }
 
     public function edit() {
         $user = $this->get_user_or_redirect();
         $idevent = $_GET["id"];
         $calendars = $user->get_calendar();
-        $event=Event::get_event($idevent);
-        
+        $event = Event::get_event($idevent);
+
         (new View("update"))->show(array("calendars" => $calendars, "event" => $event));
     }
 
@@ -148,15 +153,12 @@ class ControllerEvent extends Controller {
                     $event = new Event($idevent, $start, $finish, $wholeday, $title, $description, $idcalendar);
                     Event::delete_event($idevent);
                     Event::add_Event($event);
-                    
                 }
-                 $this->redirect("event");
-            }else{
-                (new View("error"))->show(array("errors"=>$errors));
+                $this->redirect("event");
+            } else {
+                (new View("error"))->show(array("errors" => $errors));
             }
         }
-
-       
     }
 
     public function deletevent() {
@@ -173,7 +175,8 @@ class ControllerEvent extends Controller {
             $this->redirect("event");
         }
     }
-    public function cancel(){
+
+    public function cancel() {
         $this->redirect("event");
     }
 

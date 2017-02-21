@@ -58,18 +58,12 @@ class Calendar extends Model{
         
     }
    
-     public static  function validate($description){
-         $errors=[];
-            if ($description==''){
-                $erros=" la description ne doit pas etre un champs vide !";
-            }
-         return $errors;
-     }
+    
      public static function get_color($idcalendar){
              $query =self::execute("SELECT color FROM calendar where idcalendar=?",array($idcalendar));
-             $data=$query->fetch();
-             $color=$data[0];
-             return $color;
+             $color=$query->fetch();
+             
+             return $color["color"];
          
      }
     public static function get($user){
@@ -82,7 +76,12 @@ class Calendar extends Model{
        
         return $calendars;
     }
-   
+    public static function get_calendar($idcalendar){
+        $query=self::execute("SELECT * FROM calendar where idcalendar=?", array($idcalendar));
+          $row = $query->fetch();
+          $calendar=new Calendar($row['description'],"#".$row['color'],$row['iduser'],$row['idcalendar']);
+          return $calendar;
+    }
     
    
 
