@@ -8,53 +8,41 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
+        <div class="title">My Planning</div>
         <?php include('menu.html'); ?>
+        <div class="main">
+           
+            <form id="previous" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="previous" value='<<'></form>
+            <p class="head">From <?= $day ?> to <?= $lastDay ?></p>
+            <form id="next" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="next" value='>>'></form>
 
-        <table id="message_list" class="message_list">
-            <tr>
-                <th><form id="previous" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem"value='<?= $numSem ?>'><input type='submit' name="previous" value='<<Previous week'></form></th>
-                <th><h1>My planning</h1><br>From &nbsp;&nbsp; <?= $day ?>&nbsp;&nbsp;to&nbsp;&nbsp;<?= $lastDay ?></th>
-                <th><form id="next" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem"value='<?= $numSem ?>'><input type='submit' name="next" value='Next week>>'></form></th>
-
-            </tr>
-            <?php
-            for ($i = 0; $i < sizeof($events); ++$i):
-                ?>
-                <tr>
-                    <td><?= Tools::dayOfWeek($events[$i]->dateStart) ?> <?= substr($events[$i]->dateStart, 0, 10) ?>  </td>
-                </tr>
-                <tr>
-                    <td>
+            <?php 
+            for ($j=1; $j < 7 ; ++$j):
+             $dateCurr=MyTools::dayCurr($annee, $numSem,$j);
+            ?>
+                <p><?= Tools::dayOfWeek($dateCurr) ?> <?= $dateCurr ?></p>
+                <hr>
+               <?php for($i=0;$i<sizeof($events);++$i):
+                   if($dateCurr == substr($events[$i]->dateStart, 0, 10)):?>
+                        <p class="head" style="color:#<?= $colors[$i] ?>">  <?= $events[$i]->description ?></p>
+                             
+                            <form  id="EditEvent" action="event/edit/<?= $events[$i]->idevent ?>" methode="post">
+                                <input type='hidden' name="idevent" value='<?= $events[$i]->idevent ?>'>
+                                <input type="submit" value="Edit">
+                                
+                            </form>
+                       
                         <?php if ($events[$i]->whole_day == 1): ?>
                             <p>All day</p>
-
+                            
                         <?php else : ?>
-                            <p><?= substr($events[$i]->dateStart, 10) ?> >> </p>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                       <?= print_r($colors[$i]); ?>
-                        <p style="color:#<?= $colors[$i] ?>"> <?= $events[$i]->title ?> </p>
-
-                    </td>
-                    <td>
-                        <form id="EditEvent" action="event/edit/<?= $events[$i]->idevent ?>" methode="post"><input type="submit" value="Edite event"></form>
-                    </td>
-                </tr>
-
-
-            <?php endfor; ?>
-            <tr>
-                <td></td>
-                <td> <form id="newEvent" action="event/create" methode="post"><input type="submit" value="New event"></form></td>
-                <td></td>
-            </tr>
-
-
-
-        </table>
-
-
+                            <p><?= substr($events[$i]->dateStart, 10) ?> >> </p> 
+                             <form class="head" id="EditEvent" action="event/edit/<?= $events[$i]->idevent ?>" methode="post"></form>
+                <?php endif;endif;endfor;endfor; ?>
+                            
+                            
+            <form id="newEvent" action="event/create" method="post"><input type="submit" value="Add"></form>
+        </div>
     </body>
 </html>
 

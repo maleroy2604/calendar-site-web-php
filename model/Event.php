@@ -33,7 +33,7 @@ class Event extends Model {
         $dat1 = new DateTime(trim($start), new DateTimeZone('Europe/paris'));
         $dat2 = new DateTime(trim($finish), new DateTimeZone('Europe/paris'));
         if ($title == '') {
-            $errors[] = "le titre est obligatoir ! ";
+            $errors[] = "le titre est obligatoire ! ";
         }
         if ($description == '') {
             $errors[] = " la description est obligatoire !";
@@ -48,8 +48,8 @@ class Event extends Model {
 
     public static function update_event($event) {
 
-        self::execute("UPDATE event SET start=? ,finish=?, whole_day=?,title=? ,description=? where idevent=?", array($event->dateStart, $event->dateFinish,
-            $event->whole_day, $event->title, $event->description, $event->idevent));
+        self::execute("UPDATE event SET start=? ,finish=?, whole_day=?,title=? ,description=?, idcalendar=? where idevent=?", array($event->dateStart, $event->dateFinish,
+            $event->whole_day, $event->title, $event->description, $event->idcalendar, $event->idevent));
     }
 
     public static function get_events($user) {
@@ -84,5 +84,15 @@ class Event extends Model {
     public function get_color(){
        return  Calendar::get_color($this->idcalendar);
     }
+    public static function get_eventsByIdcalendar($idcalendar){
+        $query = self::execute("SELECT * FROM event where idcalendar=?", array($idcalendar));
+        $data = $query->fetchAll();
+        $events =[];
+        foreach ($data as $row) {
+            $events[] = new Event($row['idevent'], $row['start'], $row['finish'], $row['whole_day'], $row['title'], $row['description'], $row['idcalendar']);
+        } 
+        return $events;
+    }
+    
     
 }

@@ -22,7 +22,7 @@
                     </tr>
                     <tr>
                         <td>Calendar :</td>
-                        <td><select id="calendar" name="calendar" >
+                        <td><select id="calendar" name="idcalendar" >
                                 <?php foreach ($calendars as $calendar): ?>
                                     <option value="<?= $calendar->idcalendar ?>"> <?= $calendar->description ?> </option>
                                 <?php endforeach; ?>

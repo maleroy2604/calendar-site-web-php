@@ -73,7 +73,6 @@ class Calendar extends Model{
          foreach ($data as $row) {
             $calendars[] = new Calendar($row['description'],"#".$row['color'],$row['iduser'],$row['idcalendar']);
         }
-       
         return $calendars;
     }
     public static function get_calendar($idcalendar){

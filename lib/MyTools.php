@@ -14,6 +14,13 @@ class MyTools {
         $result = $lundi->format('d M Y');
         return $result;
     }
+    public static function dayCurr($annee, $semaine,$decal) {
+        $day = new DateTime();
+        $day->setISOdate($annee, $semaine,$decal);
+        $result = $day->format('Y-m-d');
+        return $result;
+    }
+    
 
     public static function lastDay($annee, $numSem) {
         $lastDay = new DateTime();

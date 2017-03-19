@@ -8,9 +8,9 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <div class="title">welcome <?= $member->pseudo ?></div>
-        <?php include('menu.html'); ?>
-        
+        <div class="title">Welcome <?= $member->pseudo ?> </div>
+            <?php include('menu.html'); ?>
+       
     </body>
 </html>
 

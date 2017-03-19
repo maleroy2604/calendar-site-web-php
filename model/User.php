@@ -93,11 +93,32 @@ class User extends Model {
         $data = $query->fetch();
         return $data;
     }
-     public  function get_calendar() {
+    public static function get_pseudo($iduser){
+         $query = self::execute("SELECT pseudo FROM user where iduser=?",array($iduser));
+        $data = $query->fetch();
+        return $data["pseudo"];
         
-        return Calendar::get($this);
-       
-        
+    }
+    public  function get_userShare(){
+        $query = self::execute("SELECT * FROM user where iduser <>?",array($this->iduser));
+        $row = $query->fetchAll();
+        $users=[];
+        foreach($row as $data){
+            $users[] = new User($data['pseudo'], $data['password'], $data['email'], $data['full_name'], $data['iduser']);
+        }
+        return $users;
+    }
+    public static function get_idPseudo($pseudo) {
+        $query = self::execute("SELECT iduser FROM user where pseudo=?", array($pseudo));
+        $data = $query->fetch();
+        return $data["iduser"];
+    }
+    
+     public  function get_calendar() {   
+        return Calendar::get($this);  
+    }
+    public  function get_share() {   
+        return Share::get($this);  
     }
     public  function delete_calendar($calendar){
         $calendar->delete();
@@ -108,8 +129,14 @@ class User extends Model {
     public function update_calendar($calendar){
         $calendar->update();
     }
+    public function update_share($share){
+        $share->update();
+    }
     public function get_events(){
         return Event::get_events($this);
+    }
+    public function addShare($share){
+        $share->add();
     }
 
 }

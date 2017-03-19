@@ -8,7 +8,7 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <div class="title">Welcome to Calendar!</div>
+        <div class="title">Welcome to Calendar !</div>
         <div class="menu">
             <a href="main/login">Log In</a>
             <a href="main/signup">Sign Up</a>
