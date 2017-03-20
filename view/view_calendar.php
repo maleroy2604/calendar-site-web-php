@@ -25,23 +25,24 @@
                 <form class="formcalendar" action="calendar/edit/<?= $calendar->idcalendar ?>" method="post">
                     <input type="text" name="description"  value='<?= $calendar->description ?>' style="color:<?= $calendar->color ?>" >
                     <input type="color" value='<?= $calendar->color ?>' name="color">
-                    <input type='submit' value='Edit'>
+                    <input type='submit' value='Edit' name="editcalendar">
                 </form>
-                <form  class="formcalendar" action="calendar/delete/<?= $calendar->idcalendar ?>" method="post"><input type='submit' value='Delete'> </form>
+                <form  class="formcalendar" action="calendar/delete/<?= $calendar->idcalendar ?>" method="post"><input type='submit'name="delcalendar" value='Delete'> </form>
                 <form class="formcalendar" action="share/index/" method="post">
                     <input type='hidden' name="idcalendar" value="<?= $calendar->idcalendar ?>">
-                    <input type='submit'  name="shareCalendar" value='share'> 
+                    <input type='submit'  name="shareCalendar" value='Share'> 
                 </form>
             <?php endforeach; ?>
             <?php foreach ($calendarx as $calendar): ?>
-                <form class="formcalendar" action="calendar/edit/<?= $calendar->idcalendar ?>" method="post">
-                    <input type="text" name="description"  value='<?= $calendar->description ?>' style="color:<?= $calendar->color ?>" >
-                    <input type="color" value='<?= $calendar->color ?>' name="color">
-                    <br>
-                </form>
+                <div class="formcalendar">
+                    <input   type="text" name="description"  value='<?= $calendar->description ?>' style="color:<?= $calendar->color ?>" >
+                    <input  type="color" value='<?= $calendar->color ?>' name="color">
+                </div>
+                <br>
+
             <?php endforeach; ?>
 
-            <form class="formcalendar" id="calendar_id" action="calendar/index" method="post">
+            <form class="formcalendar" id="calendar_id" action="calendar/add" method="post">
                 <input id="description" type="text" name="description" >
                 <input id="color" type="color" name="color" >
                 <input id="post" type='submit' name="addcalendar" value='Add'>

@@ -81,7 +81,9 @@ class Calendar extends Model{
           $calendar=new Calendar($row['description'],"#".$row['color'],$row['iduser'],$row['idcalendar']);
           return $calendar;
     }
-    
+    public function deleteShare(){
+        Share::delete($this);
+    }
    
 
     

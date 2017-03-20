@@ -29,7 +29,7 @@
 
 
 
-                <label class="labelEvent">Description :</label><textarea id="description " name="description"  type="text"  rows="3"><?= $event->description ?></textarea><br />
+                <label class="labelEvent">Description :</label><textarea  name="description"    rows="3"><?= $event->description ?></textarea><br />
 
 
                 <label class="labelEvent"> Start time :</label><input id="startTime" name="start" type="datetime-local"  value="<?= tools::dateHtml($event->dateStart) ?>"><br />
@@ -37,19 +37,19 @@
 
 
 
-                <label class="labelEvent">Finish time :</label><input id="finishTime" name="finish" type="datetime-local"  value="<?= tools::dateHtml($event->dateFinish) ?>">
+                <label class="labelEvent">Finish time :</label><input id="finishTime" name="finish" type="datetime-local"  value="<?= tools::dateHtml($event->dateFinish) ?>"><br />
 
 
                 <label class="labelEvent" for="wholeDay"> whole day event </label>
-                <input id="wholeDay" type="checkbox" name="wholeday"<?= $event->whole_day ? ' cheked ' : '' ?> value="<?= $event->whole_day ?>" >
+                <input id="wholeDay" type="checkbox" name="wholeday"<?= $event->whole_day ? ' cheked ' : '' ?> value="<?= $event->whole_day ?>" ><br />
 
-                <input de type="submit" name="update" value="Update">
+                <input type="submit" name="update" value="Update">
             </form>
 
 
 
             <form class="formEvent" id="cancelEvent" action="event/index" method="post">
-                <input id="btn" type="submit" value="Cancel">
+                <input  type="submit" value="Cancel">
             </form>
 
 
@@ -57,7 +57,7 @@
 
 
             <form  class="formEvent" id="deleteEvent" action="event/deletevent/<?= $event->idevent ?>" method="post">
-                <input id="btn" type="submit" value="delete">
+                <input type="submit" value="delete">
             </form>
 
 

@@ -65,8 +65,6 @@ class ControllerMain extends Controller {
         (new View("welcome"))->show(array("member" => $member));
     }
 
-    public function logout() {
-        (new View("index"))->show();
-    }
+   
 
 }

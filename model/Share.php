@@ -31,8 +31,8 @@ class Share extends Model {
         self::execute("DELETE from share where idcalendar=? and iduser=?" ,array($idcalendar,$iduser));
         return true;
     }
-     public static function delete($idcalendar){
-        self::execute("DELETE from share where idcalendar=?" ,array($idcalendar));
+     public static function delete($calendar){
+        self::execute("DELETE from share where idcalendar=?" ,array($calendar->idcalendar));
         return true;
     }
     public function update(){

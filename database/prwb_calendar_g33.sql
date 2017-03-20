@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Sam 04 Février 2017 à 14:44
+-- Généré le :  Lun 20 Mars 2017 à 20:54
 -- Version du serveur :  5.7.11
 -- Version de PHP :  5.6.18
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `prwb_calendar_gxx`
+-- Base de données :  `prwb_calendar_g33`
 --
 CREATE DATABASE IF NOT EXISTS `prwb_calendar_g33` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `prwb_calendar_g33`;
@@ -35,6 +35,15 @@ CREATE TABLE `calendar` (
   `iduser` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Contenu de la table `calendar`
+--
+
+INSERT INTO `calendar` (`idcalendar`, `description`, `color`, `iduser`) VALUES
+(3, 'JAAAA', 'ff8040', 1),
+(4, 'ggggg', 'ff0000', 2),
+(5, 'oooooo', '00ff00', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -51,6 +60,16 @@ CREATE TABLE `event` (
   `idcalendar` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Contenu de la table `event`
+--
+
+INSERT INTO `event` (`idevent`, `start`, `finish`, `whole_day`, `title`, `description`, `idcalendar`) VALUES
+(1, '2017-03-20 08:00:00', '2017-03-20 16:00:00', 0, 'uuuu', 'UUUUU', 3),
+(2, '2017-03-20 07:00:00', '2017-03-20 16:00:00', 0, 'lololo', 'lololololo', 3),
+(3, '2017-03-20 08:00:00', '2017-03-20 16:00:00', 0, 'pppp', 'ppppp', 4),
+(4, '2017-03-21 08:00:00', '2017-03-21 09:00:00', 0, 'lllllll', 'lllll', 5);
+
 -- --------------------------------------------------------
 
 --
@@ -62,6 +81,16 @@ CREATE TABLE `share` (
   `idcalendar` int(11) NOT NULL,
   `read_only` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `share`
+--
+
+INSERT INTO `share` (`iduser`, `idcalendar`, `read_only`) VALUES
+(1, 4, 1),
+(1, 5, 0),
+(3, 4, 0),
+(3, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -76,6 +105,15 @@ CREATE TABLE `user` (
   `email` varchar(50) NOT NULL,
   `full_name` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `user`
+--
+
+INSERT INTO `user` (`iduser`, `pseudo`, `password`, `email`, `full_name`) VALUES
+(1, 'ant', '8886348de94e8020a61205f2dc62fb7b', 'ant@gmail.com', 'ant '),
+(2, 'aaa', '8886348de94e8020a61205f2dc62fb7b', 'AAA@gmail.com', 'aaa'),
+(3, 'bbb', '8886348de94e8020a61205f2dc62fb7b', 'bbb@gmail.com', 'bbb');
 
 --
 -- Index pour les tables exportées
@@ -118,17 +156,17 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `calendar`
 --
 ALTER TABLE `calendar`
-  MODIFY `idcalendar` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcalendar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT pour la table `event`
 --
 ALTER TABLE `event`
-  MODIFY `idevent` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idevent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Contraintes pour les tables exportées
 --

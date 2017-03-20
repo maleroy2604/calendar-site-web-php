@@ -8,10 +8,10 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <h1>Confirm Event deletion ?</h1>
+        
         <div class="main">
            
-            <p>The Event your are about to delete is not empty!</p>
+            
             <p>Are you certain you want to delete it ?</p>
             <form id="delete_calendar" action="event/remove_event/<?= $idevent ?>" method="post">
                 <input type='submit' name='cancel' value='Cancel'>

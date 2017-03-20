@@ -128,5 +128,10 @@ select[name="pseudo"]{
 }
 .formEvent{
     display:inline;
+   
+}
+.viewEvent{
+    display:inline-block;
+   width:200px;
 }
 

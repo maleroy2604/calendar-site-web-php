@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,7 +15,7 @@
 
             <br><br>
 
-            <table>
+           
                 <?php foreach ($shares as $share): ?>
                     <form  action="share/editShare/<?= $share["idcalendar"] ?>" method="post">
                         <input  name="pseudoShare" value="<?= $share["pseudo"] ?>" readonly="readonly">
@@ -38,9 +39,9 @@
                     </select>
                     <input id="read_only" type="checkbox" name="read_only" value="" >
                     <label for="read_only"> write permission </label>
-                    <input id="shar" type="submit" name="share" value="Shar my calendar" >
+                    <input id="shar" type="submit" name="share" value="Share my calendar" >
                 </form>
-            </table>
+           
         </div>
     </body>
 </html>
