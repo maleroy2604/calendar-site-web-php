@@ -8,8 +8,9 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <?php include('menu.html'); ?>
+        
         <h1  class="title">Error</h1>
+        <?php include('menu.html'); ?>
         <div class="main">
             <?php
             foreach ($errors as $err) {

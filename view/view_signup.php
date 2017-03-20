@@ -35,13 +35,13 @@
                     <tr>
                         <td>Email:</td>
                         <td><input id="email" name="email" type="text" size="16" value="<?= $email ?>"></td>
-                        <td class="errors" id="errPseudo"></td>
+                        <td class="errors" id="errEmail"></td>
                     </tr>
                     <tr>
                         <td><tr>
                         <td>Fullname:</td>
                         <td><input id="fullname" name="fullname" type="text" size="16" value="<?= $fullname ?>"></td>
-                        <td class="errors" id="errPseudo"></td>
+                        <td class="errors" id="errName"></td>
                     
                 </table>
                 <input id="btn" type="submit" value="Sign Up">

@@ -14,36 +14,36 @@
 
             <p>These are <?= $user->pseudo ?>'s calendar:</p>
 
-            <label>Description:</label>
-            <label>Color:</label>
-            <label class="labelAction">Action:</label>
+            <label class="labelcalendar">Description:</label>
+            <label class="labelcalendar">Color:</label>
+            <label class="labelcalendar">Action:</label>
 
 
             <?php foreach ($calendars as $calendar): ?>
 
 
-                <form  action="calendar/edit/<?= $calendar->idcalendar ?>" method="post">
+                <form class="formcalendar" action="calendar/edit/<?= $calendar->idcalendar ?>" method="post">
                     <input type="text" name="description"  value='<?= $calendar->description ?>' style="color:<?= $calendar->color ?>" >
-                    <input type="color" value='<?= $calendar->color ?>'name="color"></td>
+                    <input type="color" value='<?= $calendar->color ?>' name="color">
                     <input type='submit' value='Edit'>
                 </form>
-                <form  action="calendar/delete/<?= $calendar->idcalendar ?>" method="post"><input type='submit' value='Delete'> </form>
-                <form action="share/index/" method="post">
+                <form  class="formcalendar" action="calendar/delete/<?= $calendar->idcalendar ?>" method="post"><input type='submit' value='Delete'> </form>
+                <form class="formcalendar" action="share/index/" method="post">
                     <input type='hidden' name="idcalendar" value="<?= $calendar->idcalendar ?>">
                     <input type='submit'  name="shareCalendar" value='share'> 
                 </form>
             <?php endforeach; ?>
             <?php foreach ($calendarx as $calendar): ?>
-                <form  action="calendar/edit/<?= $calendar->idcalendar ?>" method="post">
+                <form class="formcalendar" action="calendar/edit/<?= $calendar->idcalendar ?>" method="post">
                     <input type="text" name="description"  value='<?= $calendar->description ?>' style="color:<?= $calendar->color ?>" >
-                    <input type="color" value='<?= $calendar->color ?>'name="color"></td>
+                    <input type="color" value='<?= $calendar->color ?>' name="color">
                     <br>
                 </form>
             <?php endforeach; ?>
 
-            <form id="calendar_id" action="calendar/index" method="post">
+            <form class="formcalendar" id="calendar_id" action="calendar/index" method="post">
                 <input id="description" type="text" name="description" >
-                <input id="color" type="color" name="color" value="color">
+                <input id="color" type="color" name="color" >
                 <input id="post" type='submit' name="addcalendar" value='Add'>
             </form>
 

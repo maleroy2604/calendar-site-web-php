@@ -12,12 +12,12 @@
         <?php include('menu.html'); ?>
         <div class="main">
            
-            <form id="previous" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="previous" value='<<'></form>
-            <p class="head">From <?= $day ?> to <?= $lastDay ?></p>
-            <form id="next" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="next" value='>>'></form>
+            <form class="formcalendar" id="previous" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="previous" value='<<'></form>
+            <p class="formcalendar">From <?= $day ?> to <?= $lastDay ?></p>
+            <form class="formcalendar" id="next" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="next" value='>>'></form>
 
             <?php 
-            for ($j=1; $j < 7 ; ++$j):
+            for ($j=1; $j < 8 ; ++$j):
              $dateCurr=MyTools::dayCurr($annee, $numSem,$j);
             ?>
                 <p><?= Tools::dayOfWeek($dateCurr) ?> <?= $dateCurr ?></p>

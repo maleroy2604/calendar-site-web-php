@@ -18,7 +18,7 @@ body {
     font-style: italic;
     font-weight: bold;
 
-    
+
 }
 
 html {
@@ -47,7 +47,7 @@ html {
     font-size   :20pt;
     font-weight :bold;
     padding     :8px;
-    
+
 }
 
 .menu a {
@@ -72,16 +72,16 @@ input[type="text"] , input[type="password"]{
 }
 
 
-label ,form input {
-   display:inline-block;
-   width: 200px;
-   margin-left: 5px;
-  
- }
-.labelAction {
-   margin-left: -70px;
+.labelcalendar ,.formcalendar input {
+    display:inline-block;
+    width: 200px;
+    margin-left: 5px;
+
 }
-form {
+.labelAction {
+    margin-left: -70px;
+}
+.formcalendar {
     display: inline;
 }
 
@@ -108,7 +108,7 @@ input[type="submit"],input[type="color"]{
     margin-top: 10px;
     width: 100px;
     font-style: italic;
-    
+
 }
 input[name="share"]{
     width : 210px;
@@ -117,14 +117,16 @@ input[name="pseudoShare"]{
     width : 200px;
 }
 select[name="pseudo"]{
-    
+
     width: 203px;
 }
-.head {
-    display: inline;
-    margin-left: 22px;
-    
+
+.labelEvent{
+    display:block;
+    float:left;
+    width:150px;
 }
-
-
+.formEvent{
+    display:inline;
+}
 

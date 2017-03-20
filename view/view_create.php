@@ -12,48 +12,28 @@
         <div class="title">Create event </div>
         <div class="main">
             <br><br>
-            <table>
-                <form id="createEvent" action="event/add" method="post"> 
-                    <tr>
-                        <td>Title :</td>
-                        <td><input id="title" name="title" type="text"  value=""></td>
-                    </tr>
-                    <tr>
-                        <td>Calendar :</td>
-                        <td><select id="calendar" name="calendar" >
-                                <?php foreach ($calendars as $calendar): ?>
-                                    <option value="<?= $calendar->idcalendar ?>"> <?= $calendar->description ?> </option>
-                                <?php endforeach; ?>
-                            </select>  
-                    </tr>
-                    <tr>
-                        <td>Description :</td>
-                        <td><textarea id="description " name="description"  type="text" value="" rows="3"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>Start time :</td>
-                        <td><input id="startTime" name="start" type="datetime-local"  value=""></td>
-                    </tr>
-                    <tr>
 
-                        <td>Finish time :</td>
-                        <td><input id="finishTime" name="finish" type="datetime-local"  value=""><td>
-                    </tr>
-                    <tr>
+            <form class="formEvent" id="createEvent" action="event/add" method="post"> 
 
-                        <td><input id="wholeDay" type="checkbox" name="wholeday"></td>
-                        <td><label for="wholeDay"> whole day event </label></td>
-                    </tr>
-                    <tr>
-                        <td><input de type="submit" value="Create">
-                </form>
-                </td>
-                <td>
-                    <form id="cancelEvent" action="Event/cancel" method="post">
-                        <input id="btn" type="submit" value="Cancel">
-                    </form></td>
-                </tr>
-            </table>
+                <label class="labelEvent" >Title :</label><input  id="title" name="title" type="text"  ><br />
+                <label class="labelEvent" >Calendar :</label><select  id="calendar" name="calendar" >
+                    <?php foreach ($calendars as $calendar): ?>
+                        <option value="<?= $calendar->idcalendar ?>"> <?= $calendar->description == '' ? 'calendar sans nom' : $calendar->description ?> </option>
+                    <?php endforeach; ?>
+                </select><br />
+                <label class="labelEvent" >Description :</label><textarea   name="description"   rows="3"></textarea><br />
+                <label class="labelEvent" >Start time :</label> <input  id="startTime" name="start" type="datetime-local"  ><br />
+                <label class="labelEvent" >Finish time :</label><input  id="finishTime" name="finish" type="datetime-local"  ><br />
+                <label for="wholeDay" class="labelEvent"> whole day event </label><input  id="wholeDay" type="checkbox" name="wholeday"><br />
+                <input  type="submit" value="Create">
+                
+
+            </form> 
+            <form  class="formEvent" id="cancelEvent" action="Event/cancel" method="post">
+                    <input id="btn" type="submit" value="Cancel">
+            </form>  
+
+
 
         </div>
     </body>

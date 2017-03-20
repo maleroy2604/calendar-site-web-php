@@ -9,10 +9,8 @@
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <h1>Confirm Calendar deletion ?</h1>
+        <div class="title">Delete ?</div>
         <div class="main">
-           
-            <p>The calendar your are about to delete is not empty!</p>
             <p>Are you certain you want to delete it ?</p>
             <form id="delete_calendar" action="calendar/remove_calendar/<?= $idcalendar ?>" method="post">
                 <input type='submit' name='cancel' value='Cancel'>
