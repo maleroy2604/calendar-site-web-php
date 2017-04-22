@@ -12,18 +12,19 @@ class ControllerCalendar extends Controller {
     public function index() {
         $user = $this->get_user_or_redirect();
         $calendarx = [];
-        $calendars = $user->get_calendar();
+        $calendars = $user->get_my_calendars();
         $shares = $user->get_share();
         foreach ($shares as $share) {
             $calendarx[] = Calendar::get_calendar($share->idcalendar);
         }
-        (new View("calendar"))->show(array("calendars" => $calendars, "user" => $user, "share" => $shares, "calendarx" => $calendarx));
+        (new View("calendar"))->show(array("calendars" => $calendars, "user" => $user, "calendarx" => $calendarx));
     }
 
     public function edit() {
+        $this->get_user_or_redirect();
         if (isset($_POST["editcalendar"])) {
             $idcalendar = $_GET["id"];
-            $user = $this->get_user_or_redirect(); 
+            $user = $this->get_user_or_redirect();
             if ((isset($_POST['description']) == '' || isset($_POST['description'])) && isset($_POST['color'])) {
                 $color = $_POST['color'];
                 $description = $_POST['description'];
@@ -35,6 +36,7 @@ class ControllerCalendar extends Controller {
     }
 
     public function add() {
+        
         if (isset($_POST["addcalendar"])) {
             if ((isset($_POST['description']) == '' || isset($_POST['description'])) && isset($_POST['color'])) {
                 $description = $_POST['description'];
@@ -48,6 +50,7 @@ class ControllerCalendar extends Controller {
     }
 
     public function delete() {
+        $this->get_user_or_redirect();
         if (isset($_POST["delcalendar"])) {
             $idcalendar = $_GET["id"];
             (new View("delete"))->show(array("idcalendar" => $idcalendar));
@@ -61,8 +64,8 @@ class ControllerCalendar extends Controller {
             $idcalendar = $_GET["id"];
             $calendar = Calendar::get_calendar($idcalendar);
             $user = $this->get_user_or_redirect();
-            $user->delete_calendar($calendar);
-            $calendar->deleteShare();
+            if($calendar::it_is_my_calendar($user,$idcalendar))
+                $user->delete_calendar($calendar);
             $this->redirect("calendar");
         }
     }

@@ -58,7 +58,7 @@ class ControllerShare extends Controller {
 
     public function editShare() {
         if (isset($_POST["editShare"])) {
-            if ((isset($_POST['pseudoShare']))) {
+            if ((isset($_POST["pseudoShare"]))) {
                 $idcalendar = $_POST["idcalendar"];
                 if (isset($_POST['read_only'])) {
                     $read_only = 1;
@@ -68,7 +68,9 @@ class ControllerShare extends Controller {
                 $iduser = User::get_idPseudo($_POST['pseudoShare']);
                 $share = new Share($iduser, $idcalendar, $read_only);
                 $share->update();
+               
             }
+             
         }
         $this->index();
     }

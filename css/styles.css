@@ -28,10 +28,6 @@ html {
     background-size: cover;
 }
 
-
-
-
-
 .menu {
     text-align  :center;
     padding     :20px;
@@ -85,16 +81,9 @@ input[type="text"] , input[type="password"]{
     display: inline;
 }
 
-
-
-
 .errors {
     color: white;
 }
-
-
-
-
 input[type="submit"],input[type="color"]{
     display           :inline;
     padding           :4px 6px;
@@ -128,10 +117,12 @@ select[name="pseudo"]{
 }
 .formEvent{
     display:inline;
-   
 }
 .viewEvent{
     display:inline-block;
-   width:200px;
+    width:200px;
+}
+.alignEvent{
+    text-align: center;
 }
 

@@ -55,8 +55,6 @@ class User extends Model {
         }
     }
 
-   
-
     public static function validate($pseudo, $password, $password_confirm, $email) {
         $errors = [];
         $member = self::get_user($pseudo);
@@ -93,50 +91,70 @@ class User extends Model {
         $data = $query->fetch();
         return $data;
     }
-    public static function get_pseudo($iduser){
-         $query = self::execute("SELECT pseudo FROM user where iduser=?",array($iduser));
+
+    public static function get_pseudo($iduser) {
+        $query = self::execute("SELECT pseudo FROM user where iduser=?", array($iduser));
         $data = $query->fetch();
         return $data["pseudo"];
-        
     }
-    public  function get_userShare(){
-        $query = self::execute("SELECT * FROM user where iduser <>?",array($this->iduser));
+
+    public function get_userShare() {
+        $query = self::execute("SELECT * FROM user where iduser <>?", array($this->iduser));
         $row = $query->fetchAll();
-        $users=[];
-        foreach($row as $data){
+        $users = [];
+        foreach ($row as $data) {
+            
             $users[] = new User($data['pseudo'], $data['password'], $data['email'], $data['full_name'], $data['iduser']);
         }
         return $users;
     }
+
     public static function get_idPseudo($pseudo) {
         $query = self::execute("SELECT iduser FROM user where pseudo=?", array($pseudo));
         $data = $query->fetch();
         return $data["iduser"];
     }
-    
-     public  function get_calendar() {   
-        return Calendar::get($this);  
-    }
-    public  function get_share() {   
-        return Share::get($this);  
-    }
-    public  function delete_calendar($calendar){
-        $calendar->delete();
-    }
-    public function add_calendar($calendar){
-        $calendar->add();
-    }
-    public function update_calendar($calendar){
-        $calendar->update();
-    }
-    public function update_share($share){
-        $share->update();
-    }
-    public function get_events(){
-        return Event::get_events($this);
-    }
-    public function addShare($share){
-        $share->add();
+
+    public function get_idcalendars_Shares() {
+        $shares = $this->get_share();
+        $idcalendars= [];
+        foreach ($shares as $share) {
+            $idcalendars[] = $share->idcalendar;
+        }
+        return $idcalendars;
     }
 
+    public function get_my_calendars() {
+        return Calendar::get($this);
+    }
+
+    public function get_share() {
+        return Share::get($this);
+    }
+    
+
+    public function delete_calendar($calendar) {
+        $calendar->delete();
+    }
+
+    public function add_calendar($calendar) {
+        $calendar->add();
+    }
+
+    public function update_calendar($calendar) {
+        $calendar->update();
+    }
+
+    public function update_share($share) {
+        $share->update();
+    }
+
+    public function get_events() {
+        return Event::get_events($this,$this->get_idcalendars_Shares());
+    }
+    public function get_allcalendars_ro(){
+        return Calendar::get_calendars_and_calendar_share_ro($this,Share::get_idcalendars_ro($this));
+    }
+
+    
 }

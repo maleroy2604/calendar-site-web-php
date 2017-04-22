@@ -34,6 +34,13 @@
                     <input type='hidden' name="idcalendar" value="<?= $idcalendar ?>">
                     <select id="idShare" name="pseudo" >
                         <?php foreach ($users as $user): ?>
+                        <?php foreach ($shares as $share):
+                    
+                     if ($user->idUser==$share->iduser): 
+                         $selected='selected="selected"';
+                     else : 
+                         $selected='';
+                    endif; ?>
                             <option> <?= $user->pseudo ?> </option>
                         <?php endforeach; ?>
                     </select>

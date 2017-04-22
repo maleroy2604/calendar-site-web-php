@@ -13,41 +13,33 @@ class ControllerEvent extends Controller {
     public function index() {
         date_default_timezone_set('UTC');
         $user = $this->get_user_or_redirect();
-        $eventSharesx = $this->eventSharing($user);
-        $eventsUser = $user->get_events();
-        $eventm = $this->event($eventSharesx, $eventsUser);
+        $eventm = $user->get_events();
         $colors = $this->colorEvents($eventm);
-        $this->test($numSem, $annee);
+        $this->changeWeek($numSem, $annee);
         $day = MyTools::day($annee, $numSem);
         $lastDay = MyTools::lastDay($annee, $numSem);
         $events = $this->events($eventm, $numSem);
-        (new View("event"))->show(array("events" => $events, "user" => $user, "colors" => $colors, "numSem" => $numSem, "day" => $day, "annee" => $annee, "lastDay" => $lastDay));
+        (new View("event"))->show(array("events" => $events, "user" => $user, "colors" => $colors, "numSem" => $numSem,
+            "day" => $day, "annee" => $annee, "lastDay" => $lastDay));
     }
 
     public function create() {
         $user = $this->get_user_or_redirect();
         $shares = $user->get_share();
-        $calendarx = $user->get_calendar();
-        if (sizeof($calendarx) >= 1) {
-            $calendars = [];
-            foreach ($shares as $share) {
-                if ($share->read_only == 1) {
-                    $calendars[] = Calendar::get_calendar($share->idcalendar);
-                }
+        $calendars = $user->get_allcalendars_ro();
+        if (isset($_POST["create"])) {
+            if (sizeof($calendars) > 0) {
+                (new View("create"))->show(array("calendars" => $calendars));
+            } else {
+                $errors = array("Vous devez d'abord crée un calendrier ! ");
+                (new View("error"))->show(array("errors" => $errors));
             }
-            foreach ($calendarx as $calendar) {
-                $calendars[] = $calendar;
-            }
-            (new View("create"))->show(array("calendars" => $calendars));
-        } else {
-            $errors = array("Vous devez d'abord crée un calendrier ! ");
-            (new View("error"))->show(array("errors" => $errors));
         }
     }
 
     public function add() {
-
-        if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['start']) && isset($_POST['finish'])) {
+        $this->get_user_or_redirect();
+        if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST["calendar"]) && isset($_POST['start']) && isset($_POST['finish'])) {
             if (isset($_POST['wholeday'])) {
                 $wholeday = 1;
             } else {
@@ -59,7 +51,6 @@ class ControllerEvent extends Controller {
             $start = str_replace("T", " ", $_POST['start']);
             $finish = str_replace("T", " ", $_POST['finish']);
             $errors = Event::validate($start, $finish, $title, $description);
-
             if (count($errors) == 0) {
                 $event = new Event(-1, $start, $finish, $wholeday, $title, $description, $idcalendar);
                 Event::add_Event($event);
@@ -72,36 +63,29 @@ class ControllerEvent extends Controller {
 
     public function edit() {
         $user = $this->get_user_or_redirect();
-        $idevent = $_GET["id"];
-        $errors = [];
-        $evente = Event::get_event($idevent);
-        $idcalendar = $evente->idcalendar;
-        $sharex = Share::get_share($idcalendar);
-        foreach ($sharex as $share) {
-            if ($share->iduser == $user->iduser && $share->read_only == 0) {
-                $errors[] = " le calendrier partagé est en lecture seule";
-            }
-        }
-        $shares = $user->get_share();
-        $calendarx = $user->get_calendar();
-        $calendars = [];
-        foreach ($shares as $share) {
-            if ($share->read_only == 1) {
-                $calendars[] = Calendar::get_calendar($share->idcalendar);
-            }
-        }
-        foreach ($calendarx as $calendar) {
-            $calendars[] = $calendar;
-        }
-        if (count($errors) == 0) {
+        if (isset($_POST["update"])) {
+            $idevent = $_POST["idevent"];
+            $errors = [];
             $event = Event::get_event($idevent);
-            (new View("update"))->show(array("calendars" => $calendars, "event" => $event));
-        } else {
-            (new View("error"))->show(array("errors" => $errors));
+            $idcalendar = $event->idcalendar;
+            if (!Calendar::it_is_my_calendar($user, $idcalendar)) {
+                $shareEvent = Share::get_share($idcalendar);
+                if ($shareEvent->read_only == 0) {
+                    $errors[] = "cette evenement est en lecture seule";
+                }
+            }
+            $calendars = $user->get_allcalendars_ro();
+            if (count($errors) == 0) {
+                $event = Event::get_event($idevent);
+                (new View("update"))->show(array("calendars" => $calendars, "event" => $event));
+            } else {
+                (new View("error"))->show(array("errors" => $errors));
+            }
         }
     }
 
     public function update() {
+        $this->get_user_or_redirect();
         if (isset($_POST['update'])) {
             $idevent = $_GET["id"];
             if (isset($_POST['wholeday'])) {
@@ -124,11 +108,13 @@ class ControllerEvent extends Controller {
     }
 
     public function deletevent() {
+        $this->get_user_or_redirect();
         $idevent = $_GET["id"];
         (new View("deletevent"))->show(array("idevent" => $idevent));
     }
 
     public function remove_event() {
+
         if (isset($_POST['cancel'])) {
             $this->redirect("event");
         } else if (isset($_POST['confirm'])) {
@@ -140,33 +126,6 @@ class ControllerEvent extends Controller {
 
     public function cancel() {
         $this->redirect("event");
-    }
-
-    private function eventSharing($user) {
-        $shares = $user->get_share();
-        $idcalendars = [];
-        $eventSharesx = [];
-        foreach ($shares as $share) {
-            $idcalendars[] = $share->idcalendar;
-        }
-        foreach ($idcalendars as $idcalendar) {
-            $eventShares = Event::get_eventsByIdcalendar($idcalendar);
-            foreach ($eventShares as $eventShare) {
-                $eventSharesx[] = $eventShare;
-            }
-        }
-        return $eventSharesx;
-    }
-
-    private function event($eventSharesx, $eventsUser) {
-        $eventm = [];
-        foreach ($eventSharesx as $event) {
-            $eventm[] = $event;
-        }
-        foreach ($eventsUser as $event) {
-            $eventm[] = $event;
-        }
-        return $eventm;
     }
 
     private function updateEvent($event) {
@@ -203,15 +162,16 @@ class ControllerEvent extends Controller {
         }
     }
 
-    private function previous(&$numSem,&$annee) {
+    private function previous(&$numSem, &$annee) {
         if ($numSem == 1) {
-                --$annee;
-                $numSem = MyTools::lastWeekNumberOfYear($annee);
-            } else {
-                --$numSem;
-            }
+            --$annee;
+            $numSem = MyTools::lastWeekNumberOfYear($annee);
+        } else {
+            --$numSem;
+        }
     }
-    private function test(&$numSem,&$annee){
+
+    private function changeWeek(&$numSem, &$annee) {
         if (isset($_POST['numSem'])) {
             $numSem = (int) $_POST['numSem'];
         } else {

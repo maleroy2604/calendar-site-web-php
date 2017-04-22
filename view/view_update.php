@@ -21,8 +21,15 @@
 
 
                 <label class="labelEvent"> Calendar :</label> <select  name="idcalendar" >
-                    <?php foreach ($calendars as $calendar): ?>
-                        <option value="<?= $calendar->idcalendar ?>"> <?= $calendar->description ?> </option>
+                    <?php foreach ($calendars as $calendar):
+                    
+                     if ($calendar->idcalendar == $event->idcalendar): 
+                         $selected='selected="selected"';
+                     else : 
+                         $selected='';
+                    endif; ?>
+                    <option <?= $selected ?> value="<?= $calendar->idcalendar ?>"> <?= $calendar->description ?> </option>
+                   
                     <?php endforeach; ?>
 
                 </select><br />

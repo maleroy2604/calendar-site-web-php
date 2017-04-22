@@ -7,6 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
+    
+   
     <body>
         <div class="title">My Calendar</div>
         <?php include('menu.html'); ?>
@@ -35,8 +37,9 @@
             <?php endforeach; ?>
             <?php foreach ($calendarx as $calendar): ?>
                 <div class="formcalendar">
-                    <input   type="text" name="description"  value='<?= $calendar->description ?>' style="color:<?= $calendar->color ?>" >
-                    <input  type="color" value='<?= $calendar->color ?>' name="color">
+                    <input readonly="readonly"  type="text" name="description"  value='<?= $calendar->description ?>' style="color:<?= $calendar->color ?>" >
+                    <input disabled="disabled" type="color" value='<?= $calendar->color ?>' name="color">
+                   
                 </div>
                 <br>
 

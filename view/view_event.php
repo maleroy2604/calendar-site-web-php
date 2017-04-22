@@ -6,16 +6,43 @@
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+        <link href='lib/fullcalendar.min.css' rel='stylesheet' />
+        <link href='lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+        <script src='lib/lib/moment.min.js'></script>
+        <script src='lib/lib/jquery.min.js'></script>
+        <script src='lib/fullcalendar.min.js'></script>
+        <script>
+            $(document).ready(function () {
+                $('#calendar').fullCalendar({
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay'
+
+                    },
+                    events: []
+                });
+            });
+
+
+        </script>
     </head>
+
     <body>
         <div class="title">My Planning</div>
         <?php include('menu.html'); ?>
-        <div class="main">
-
-            <form class="formcalendar" id="previous" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="previous" value='<<'></form>
-            <p class="formcalendar">From <?= $day ?> to <?= $lastDay ?></p>
-            <form class="formcalendar" id="next" action="event/index" method="post"><input type='hidden' name="annee" value='<?= $annee ?>'><input type='hidden' name="numSem" value='<?= $numSem ?>'><input type='submit' name="next" value='>>'></form>
-
+        <div class="main" id="calendar">
+            <div class="alignEvent" name="header">
+                <form class="formcalendar" id="previous" action="event/index" method="post">
+                    <input type='hidden' name="annee" value='<?= $annee ?>'>
+                    <input type='hidden' name="numSem" value='<?= $numSem ?>'>
+                    <input type='submit' name="previous" value='<<'></form>
+                <p class="formcalendar">From <?= $day ?> to <?= $lastDay ?></p>
+                <form class="formcalendar" id="next" action="event/index" method="post">
+                    <input type='hidden' name="annee" value='<?= $annee ?>'>
+                    <input type='hidden' name="numSem" value='<?= $numSem ?>'>
+                    <input type='submit' name="next" value='>>'></form>
+            </div>
             <?php
             for ($j = 1; $j < 8; ++$j):
                 $dateCurr = MyTools::dayCurr($annee, $numSem, $j);
@@ -26,28 +53,29 @@
                 for ($i = 0; $i < sizeof($events); ++$i):
                     if ($dateCurr == substr($events[$i]->dateStart, 0, 10)):
                         ?>
-                        <label class="viewEvent" style="color:#<?= $colors[$i] ?>">  <?= $events[$i]->title ?></label>
-                        <label class="viewEvent" style="color:#<?= $colors[$i] ?>">  <?= $events[$i]->description ?></label>
-                        <form  class="viewEvent"  action="event/edit/<?= $events[$i]->idevent ?>" method="post">
-                            <input   type="submit" value="Edit">
+                        <div class="alignEvent">
+                            <?php if ($events[$i]->whole_day == 1): ?>
+                                <p class="viewEvent">All day</p>
+                            <?php else : ?>
+                                <p class="formEvent"> <?= substr($events[$i]->dateStart, 10) ?> >> </p>
+                            <?php endif; ?>
 
-                        </form><br />
+                            <label class="viewEvent" style="color:#<?= $colors[$i] ?>">  <?= $events[$i]->title ?></label>
 
-                        <?php if ($events[$i]->whole_day == 1): ?>
-                            <p class="viewEvent">All day</p>
+                            <form  class="viewEvent"  action="event/edit" method="post">
+                                <input type='hidden' name="idevent" value='<?= $events[$i]->idevent ?>'><input  id="edit" type="submit" name="update" value="Edit">
+                            </form><br>
 
-                        <?php else : ?>
-                            <p class="formEvent"><?= substr($events[$i]->dateStart, 10) ?> >> </p> 
-                            <p class="formEvent"><?= substr($events[$i]->dateFinish, 10) ?>  </p><br />
+                        </div>
 
                         <?php
-                        endif;
-                    endif;endfor;
+                    endif;
+                endfor;
             endfor;
             ?>
 
 
-            <form id="newEvent" action="event/create" method="post"><input type="submit" value="Add"></form>
+            <form id="newEvent" action="event/create" method="post"><input  id="edit" type="submit" name="create" value="Add"></form>
         </div>
     </body>
 </html>

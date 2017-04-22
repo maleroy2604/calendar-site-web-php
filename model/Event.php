@@ -41,8 +41,6 @@ class Event extends Model {
         if ($dat2 < $dat1) {
             $errors[] = "la date de debut est superieur à la date de fin ! ";
         }
-
-
         return $errors;
     }
 
@@ -52,19 +50,25 @@ class Event extends Model {
             $event->whole_day, $event->title, $event->description, $event->idcalendar, $event->idevent));
     }
 
-    public static function get_events($user) {
-        $query = self::execute("SELECT * FROM event where idcalendar in (SELECT  idcalendar FROM calendar where iduser=? )order by start ASC", array($user->iduser));
-        
+    public static function get_events($user, $idcalendars) {
+        $query = self::execute("SELECT * FROM event where idcalendar in (SELECT  idcalendar FROM calendar where iduser=? )", array($user->iduser));
         $data = $query->fetchAll();
-       
         $events = [];
         foreach ($data as $row) {
             $events[] = new Event($row['idevent'], $row['start'], $row['finish'], $row['whole_day'], $row['title'], $row['description'], $row['idcalendar']);
-        } 
+        }
+  
+        foreach ($idcalendars as $idcalendar) {
+            $query1 = self::execute("SELECT * FROM event where idcalendar=?", array($idcalendar));
+            $rows = $query1->fetchAll();
+            foreach ($rows as $row) {
+                $events[] = new Event($row['idevent'], $row['start'], $row['finish'], $row['whole_day'], $row['title'], $row['description'], $row['idcalendar']);
+            }
+        }
+
         return $events;
     }
 
-   
     public static function delete_event($idevent) {
         self::execute("DELETE from event where idevent=?", array($idevent));
         return true;
@@ -81,18 +85,19 @@ class Event extends Model {
 
         return $event;
     }
-    public function get_color(){
-       return  Calendar::get_color($this->idcalendar);
+
+    public function get_color() {
+        return Calendar::get_color($this->idcalendar);
     }
-    public static function get_eventsByIdcalendar($idcalendar){
+
+    public static function get_eventsByIdcalendar($idcalendar) {
         $query = self::execute("SELECT * FROM event where idcalendar=?", array($idcalendar));
         $data = $query->fetchAll();
-        $events =[];
+        $events = [];
         foreach ($data as $row) {
             $events[] = new Event($row['idevent'], $row['start'], $row['finish'], $row['whole_day'], $row['title'], $row['description'], $row['idcalendar']);
-        } 
+        }
         return $events;
     }
-    
-    
+
 }

@@ -18,7 +18,7 @@
                 <label class="labelEvent" >Title :</label><input  id="title" name="title" type="text"  ><br />
                 <label class="labelEvent" >Calendar :</label><select  id="calendar" name="calendar" >
                     <?php foreach ($calendars as $calendar): ?>
-                        <option value="<?= $calendar->idcalendar ?>"> <?= $calendar->description == '' ? 'calendar sans nom' : $calendar->description ?> </option>
+                        <option name="calendar" value="<?= $calendar->idcalendar ?>"> <?= $calendar->description == '' ? 'calendar sans nom' : $calendar->description ?> </option>
                     <?php endforeach; ?>
                 </select><br />
                 <label class="labelEvent" >Description :</label><textarea   name="description"   rows="3"></textarea><br />
