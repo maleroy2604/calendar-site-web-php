@@ -98,8 +98,8 @@ class User extends Model {
         return $data["pseudo"];
     }
 
-    public function get_userShare() {
-        $query = self::execute("SELECT * FROM user where iduser <>?", array($this->iduser));
+    public function get_userShare($idcalendar) {
+        $query = self::execute("SELECT * FROM USER where iduser NOT IN (select iduser from share where idcalendar=:idcalendar)and iduser<>:iduser ", array("iduser"=>$this->iduser,"idcalendar"=>$idcalendar));
         $row = $query->fetchAll();
         $users = [];
         foreach ($row as $data) {

@@ -11,8 +11,8 @@ class ControllerShare extends Controller {
 
     public function index() {
         $user = $this->get_user_or_redirect();
-        $users = $user->get_userShare();
         $idcalendar = $_POST["idcalendar"];
+        $users = $user->get_userShare($idcalendar);
         $sharex = Share::get_share($idcalendar);
         $shares = [];
         foreach ($sharex as $share) {

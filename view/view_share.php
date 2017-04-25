@@ -19,7 +19,7 @@
                 <?php foreach ($shares as $share): ?>
                     <form  action="share/editShare/<?= $share["idcalendar"] ?>" method="post">
                         <input  name="pseudoShare" value="<?= $share["pseudo"] ?>" readonly="readonly">
-                        <input id="read_only" type="checkbox" name="read_only" <?= $share["checked"] ?> value="" >
+                        <input id="read_only" type="checkbox" name="read_only" <?= $share["checked"] ?> >
                         <input type='hidden' name="idcalendar" value="<?= $idcalendar ?>">
                         <label for="read_only"> write permission </label>
                         <input type='submit' name="editShare" value='Edit'>
@@ -33,16 +33,13 @@
                 <form  action="share/addShare" method="post">
                     <input type='hidden' name="idcalendar" value="<?= $idcalendar ?>">
                     <select id="idShare" name="pseudo" >
-                        <?php foreach ($users as $user): ?>
-                        <?php foreach ($shares as $share):
+                    <?php foreach ($users as $user): ?>
+                       
                     
-                     if ($user->idUser==$share->iduser): 
-                         $selected='selected="selected"';
-                     else : 
-                         $selected='';
-                    endif; ?>
+                        
                             <option> <?= $user->pseudo ?> </option>
                         <?php endforeach; ?>
+                       
                     </select>
                     <input id="read_only" type="checkbox" name="read_only" value="" >
                     <label for="read_only"> write permission </label>
