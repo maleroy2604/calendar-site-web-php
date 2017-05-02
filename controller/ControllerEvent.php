@@ -137,13 +137,12 @@ class ControllerEvent extends Controller {
         foreach ($eventm as $eventx) {
 
             $numSemainEvent = date('W', strtotime($eventx->dateFinish));
-            if ($numSemainEvent >=$numSem) {
+            if ($numSemainEvent >= $numSem) {
                 $events[] = $eventx;
             }
         }
         return $events;
     }
-
 
     private function next(&$numSem, &$annee) {
         if ($numSem <= MyTools::lastWeekNumberOfYear($annee))
@@ -152,7 +151,6 @@ class ControllerEvent extends Controller {
             $numSem = 1;
             ++$annee;
         }
-        
     }
 
     private function previous(&$numSem, &$annee) {
@@ -162,7 +160,6 @@ class ControllerEvent extends Controller {
         } else {
             --$numSem;
         }
-       
     }
 
     private function changeWeek(&$numSem, &$annee) {
@@ -184,6 +181,33 @@ class ControllerEvent extends Controller {
             $numSem = (int) $_POST['numSem'];
             $this->previous($numSem, $annee);
         }
+    }
+
+    public function get_events_json() {
+        $str="";
+        $user = $this->get_user_or_redirect();
+        $events = $user->get_events();
+        foreach ($events as $event) {
+
+            $idevent=$event->idevent;
+            $dateStart=$event->dateStart;
+            $dateFinish=$event->dateFinish;
+            $whole_day=$event->whole_day;
+            $title=$event->title;
+            $description=$event->description;
+            $idcalendar=$event->idcalendar;
+            $idevent=  json_encode($idevent);
+            $dateStart=json_encode($dateStart);
+            $dateFinish=json_encode($dateFinish);
+            $whole_day=json_encode($whole_day);
+            $title=json_encode($title);
+            $description=json_encode($description);
+            $idcalendar=json_encode($idcalendar);
+            $str .= "{\"id\":$idevent,\"start\":$dateStart,\"end\":$dateFinish,\"whole_day\":$whole_day,\"title\":$title,\"description\":$description,\"idcalendar\":$idcalendar},"; 
+        }
+        if($str !== "")
+            $str = substr($str,0,strlen($str)-1);
+        echo "[$str]";
     }
 
 }

@@ -61,6 +61,7 @@ class ControllerMain extends Controller {
         $member = $this->get_user_or_redirect();
         if (isset($_GET["id"]) && $_GET["id"] !== "") {
             $member = User::get_user($_GET["id"]);
+            
         }
         (new View("welcome"))->show(array("member" => $member));
     }
