@@ -21,11 +21,6 @@ class Calendar extends Model {
                        VALUES(?,?,?)", array($this->description, substr($this->color, 1), $this->iduser));
     }
 
-    public static function delete_calendar($idcalendar) {
-        Event::delete_events($idcalendar);
-        self::execute("DELETE from calendar where idcalendar=?", array($idcalendar));
-        return true;
-    }
 
     public function delete() {
         $this->delete_all_events();

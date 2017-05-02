@@ -21,10 +21,9 @@ class ControllerCalendar extends Controller {
     }
 
     public function edit() {
-        $this->get_user_or_redirect();
+        $user=$this->get_user_or_redirect();
         if (isset($_POST["editcalendar"])) {
             $idcalendar = $_GET["id"];
-            $user = $this->get_user_or_redirect();
             if ((isset($_POST['description']) == '' || isset($_POST['description'])) && isset($_POST['color'])) {
                 $color = $_POST['color'];
                 $description = $_POST['description'];
@@ -36,12 +35,11 @@ class ControllerCalendar extends Controller {
     }
 
     public function add() {
-        
+        $user=$this->get_user_or_redirect();
         if (isset($_POST["addcalendar"])) {
             if ((isset($_POST['description']) == '' || isset($_POST['description'])) && isset($_POST['color'])) {
                 $description = $_POST['description'];
                 $color = $_POST['color'];
-                $user = $this->get_user_or_redirect();
                 $calendar = new Calendar($description, $color, $user->iduser, -1);
                 $user->add_calendar($calendar);
                 $this->redirect("calendar");
@@ -50,7 +48,7 @@ class ControllerCalendar extends Controller {
     }
 
     public function delete() {
-        $this->get_user_or_redirect();
+        $user=$this->get_user_or_redirect();
         if (isset($_POST["delcalendar"])) {
             $idcalendar = $_GET["id"];
             (new View("delete"))->show(array("idcalendar" => $idcalendar));
@@ -58,12 +56,12 @@ class ControllerCalendar extends Controller {
     }
 
     public function remove_calendar() {
+        $user=$this->get_user_or_redirect();
         if (isset($_POST['cancel'])) {
             $this->redirect("calendar");
         } else if (isset($_POST['confirm'])) {
             $idcalendar = $_GET["id"];
             $calendar = Calendar::get_calendar($idcalendar);
-            $user = $this->get_user_or_redirect();
             if($calendar::it_is_my_calendar($user,$idcalendar))
                 $user->delete_calendar($calendar);
             $this->redirect("calendar");

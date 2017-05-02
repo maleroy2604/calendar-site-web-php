@@ -46,12 +46,18 @@ class Share extends Model {
 
     public static function get_share($idcalendar) {
         $query = self::execute("SELECT * FROM share where  idcalendar=?", array($idcalendar));
+        $row = $query->fetch();
+           $share = new Share($row['iduser'], $row['idcalendar'], $row['read_only']);
+        return $share;
+    }
+     public static function get_shares($idcalendar) {
+        $query = self::execute("SELECT * FROM share where  idcalendar=?", array($idcalendar));
         $data = $query->fetchAll();
-        $shars=[];
-        foreach ($data as $row) {
-           $shars[] = new Share($row['iduser'], $row['idcalendar'], $row['read_only']);
+        $shares=[];
+        foreach($data as $row){
+           $shares[] = new Share($row['iduser'], $row['idcalendar'], $row['read_only']);
         }
-        return $shars;
+        return $shares;
     }
 
     public static function get_idcalendars($iduser) {

@@ -13,10 +13,10 @@ class ControllerShare extends Controller {
         $user = $this->get_user_or_redirect();
         $idcalendar = $_POST["idcalendar"];
         $users = $user->get_userShare($idcalendar);
-        $sharex = Share::get_share($idcalendar);
+        $sharex = Share::get_shares($idcalendar);
         $shares = [];
         foreach ($sharex as $share) {
-            $pseudo = $user::get_pseudo($share->iduser);
+            $pseudo = $user->get_pseudo($share->iduser);
             $idcalendar = $share->idcalendar;
             $read_only = $share->read_only;
             $checked = '';
@@ -29,6 +29,7 @@ class ControllerShare extends Controller {
     }
 
     public function addShare() {
+        $user = $this->get_user_or_redirect();
         $exist = FALSE;
         $iduser = '';
         $read_only = '';
@@ -41,7 +42,7 @@ class ControllerShare extends Controller {
                 $read_only = 0;
             }
             $pseudo = $_POST['pseudo'];
-            $iduser = User::get_idPseudo($_POST['pseudo']);
+            $iduser = $user->get_idPseudo($_POST['pseudo']);
             $idcalendars = Share::get_idcalendars($iduser);
             foreach ($idcalendars as $idcalendarx) {
                 if ($idcalendar == $idcalendarx) {
@@ -57,6 +58,7 @@ class ControllerShare extends Controller {
     }
 
     public function editShare() {
+         $user = $this->get_user_or_redirect();
         if (isset($_POST["editShare"])) {
             if ((isset($_POST["pseudoShare"]))) {
                 $idcalendar = $_POST["idcalendar"];
@@ -65,7 +67,7 @@ class ControllerShare extends Controller {
                 } else {
                     $read_only = 0;
                 }
-                $iduser = User::get_idPseudo($_POST['pseudoShare']);
+                $iduser = $user->get_idPseudo($_POST['pseudoShare']);
                 $share = new Share($iduser, $idcalendar, $read_only);
                 $share->update();
                
@@ -76,11 +78,12 @@ class ControllerShare extends Controller {
     }
 
     public function deleteShare() {
+         $user = $this->get_user_or_redirect();
         if (isset($_POST["deleteShare"])) {
             $idcalendar = $_POST["idcalendar"];
             $pseudo = $_POST["pseudo"];
-            $iduser = User::get_idPseudo($_POST['pseudo']);
-            Share::delete_share($idcalendar, $iduser);
+            $iduser = $user->get_idPseudo($_POST['pseudo']);
+            $user->delete_share($idcalendar,$iduser);
         }
         $this->index();
     }

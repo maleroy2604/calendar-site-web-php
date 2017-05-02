@@ -14,12 +14,11 @@ class ControllerEvent extends Controller {
         date_default_timezone_set('UTC');
         $user = $this->get_user_or_redirect();
         $eventm = $user->get_events();
-        $colors = $this->colorEvents($eventm);
         $this->changeWeek($numSem, $annee);
         $day = MyTools::day($annee, $numSem);
         $lastDay = MyTools::lastDay($annee, $numSem);
         $events = $this->events($eventm, $numSem);
-        (new View("event"))->show(array("events" => $events, "user" => $user, "colors" => $colors, "numSem" => $numSem,
+        (new View("event"))->show(array("events" => $events, "user" => $user, "numSem" => $numSem,
             "day" => $day, "annee" => $annee, "lastDay" => $lastDay));
     }
 
@@ -137,21 +136,14 @@ class ControllerEvent extends Controller {
         $events = [];
         foreach ($eventm as $eventx) {
 
-            $numSemainEvent = date('W', strtotime($eventx->dateStart));
-            if ($numSemainEvent == $numSem) {
+            $numSemainEvent = date('W', strtotime($eventx->dateFinish));
+            if ($numSemainEvent >=$numSem) {
                 $events[] = $eventx;
             }
         }
         return $events;
     }
 
-    private function colorEvents($eventm) {
-        $colors = [];
-        foreach ($eventm as $event) {
-            $colors[] = $event->get_color();
-        }
-        return $colors;
-    }
 
     private function next(&$numSem, &$annee) {
         if ($numSem <= MyTools::lastWeekNumberOfYear($annee))
@@ -160,6 +152,7 @@ class ControllerEvent extends Controller {
             $numSem = 1;
             ++$annee;
         }
+        
     }
 
     private function previous(&$numSem, &$annee) {
@@ -169,6 +162,7 @@ class ControllerEvent extends Controller {
         } else {
             --$numSem;
         }
+       
     }
 
     private function changeWeek(&$numSem, &$annee) {

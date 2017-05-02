@@ -85,6 +85,7 @@ class Event extends Model {
 
         return $event;
     }
+    
 
     public function get_color() {
         return Calendar::get_color($this->idcalendar);

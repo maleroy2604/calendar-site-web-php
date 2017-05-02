@@ -46,21 +46,30 @@
             <?php
             for ($j = 1; $j < 8; ++$j):
                 $dateCurr = MyTools::dayCurr($annee, $numSem, $j);
+                
                 ?>
                 <p><?= Tools::dayOfWeek($dateCurr) ?> <?= $dateCurr ?></p>
                 <hr>
                 <?php
                 for ($i = 0; $i < sizeof($events); ++$i):
-                    if ($dateCurr == substr($events[$i]->dateStart, 0, 10)):
-                        ?>
+                    $debut=substr($events[$i]->dateStart, 0, 10);
+                    $fin=substr($events[$i]->dateFinish, 0, 10);
+                    $whole_day=$events[$i]->whole_day;
+                    if ($dateCurr >= $debut && $dateCurr<=$fin):?>
+                <p style="color:red"> <?php print_r($dateCurr);?></p>
                         <div class="alignEvent">
-                            <?php if ($events[$i]->whole_day == 1): ?>
-                                <p class="viewEvent">All day</p>
-                            <?php else : ?>
-                                <p class="formEvent"> <?= substr($events[$i]->dateStart, 10) ?> >> </p>
-                            <?php endif; ?>
-
-                            <label class="viewEvent" style="color:#<?= $colors[$i] ?>">  <?= $events[$i]->title ?></label>
+                            <?php if ($whole_day == 1 ): ?>
+                             <p class="viewEvent">All day</p>
+                            <?php elseif ($dateCurr == $debut && $dateCurr<$fin ): ?>
+                             <p class="formEvent"> <?= substr($events[$i]->dateStart, 10) ?> >> </p>
+                            <?php elseif ($dateCurr<$fin): ?>
+                              <p class="viewEvent">All day</p>
+                               <?php elseif($dateCurr == $debut && $dateCurr == $fin && $whole_day != 1 ) : ?>
+                              <p class="formEvent"> <?= substr($events[$i]->dateStart, 10) ?> - <?= substr($events[$i]->dateFinish, 10) ?></p>
+                            <?php elseif($dateCurr == $fin && $whole_day != 1 ) : ?>
+                              <p class="formEvent"> <?= substr($events[$i]->dateFinish, 10) ?> >> </p>     
+                            <?php endif;?>  
+                                <label class="viewEvent" style="color:#<?= $events[$i]->get_color() ?>">  <?= $events[$i]->title ?></label>
 
                             <form  class="viewEvent"  action="event/edit" method="post">
                                 <input type='hidden' name="idevent" value='<?= $events[$i]->idevent ?>'><input  id="edit" type="submit" name="update" value="Edit">
