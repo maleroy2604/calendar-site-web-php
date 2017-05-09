@@ -60,27 +60,50 @@ class ControllerEvent extends Controller {
         }
     }
 
+//    public function edit() {
+//        $user = $this->get_user_or_redirect();
+//        if (isset($_POST["update"])) {
+//            $idevent = $_POST["idevent"];
+//            $errors = [];
+//            $event = Event::get_event($idevent);
+//            $idcalendar = $event->idcalendar;
+//            if (!Calendar::it_is_my_calendar($user, $idcalendar)) {
+//                $shareEvent = Share::get_share($idcalendar);
+//                if ($shareEvent->read_only == 0) {
+//                    $errors[] = "cette evenement est en lecture seule";
+//                }
+//            }
+//            $calendars = $user->get_allcalendars_ro();
+//            if (count($errors) == 0) {
+//                $event = Event::get_event($idevent);
+//                (new View("update"))->show(array("calendars" => $calendars, "event" => $event));
+//            } else {
+//                (new View("error"))->show(array("errors" => $errors));
+//            }
+//        }
+//    }
+    
     public function edit() {
         $user = $this->get_user_or_redirect();
-        if (isset($_POST["update"])) {
-            $idevent = $_POST["idevent"];
-            $errors = [];
-            $event = Event::get_event($idevent);
-            $idcalendar = $event->idcalendar;
-            if (!Calendar::it_is_my_calendar($user, $idcalendar)) {
-                $shareEvent = Share::get_share($idcalendar);
-                if ($shareEvent->read_only == 0) {
-                    $errors[] = "cette evenement est en lecture seule";
-                }
-            }
-            $calendars = $user->get_allcalendars_ro();
-            if (count($errors) == 0) {
-                $event = Event::get_event($idevent);
-                (new View("update"))->show(array("calendars" => $calendars, "event" => $event));
-            } else {
-                (new View("error"))->show(array("errors" => $errors));
+        
+        $idevent = $_GET["id"];
+        $errors = [];
+        $event = Event::get_event($idevent);
+        $idcalendar = $event->idcalendar;
+        if (!Calendar::it_is_my_calendar($user, $idcalendar)) {
+            $shareEvent = Share::get_share($idcalendar);
+            if ($shareEvent->read_only == 0) {
+                $errors[] = "cette evenement est en lecture seule";
             }
         }
+        $calendars = $user->get_allcalendars_ro();
+        if (count($errors) == 0) {
+            $event = Event::get_event($idevent);
+            (new View("update"))->show(array("calendars" => $calendars, "event" => $event));
+        } else {
+            (new View("error"))->show(array("errors" => $errors));
+        }
+        
     }
 
     public function update() {
@@ -184,30 +207,37 @@ class ControllerEvent extends Controller {
     }
 
     public function get_events_json() {
-        $str="";
+        $str = "";
         $user = $this->get_user_or_redirect();
         $events = $user->get_events();
         foreach ($events as $event) {
 
-            $idevent=$event->idevent;
-            $dateStart=$event->dateStart;
-            $dateFinish=$event->dateFinish;
-            $whole_day=$event->whole_day;
-            $title=$event->title;
-            $description=$event->description;
-            $idcalendar=$event->idcalendar;
-            $idevent=  json_encode($idevent);
-            $dateStart=json_encode($dateStart);
-            $dateFinish=json_encode($dateFinish);
-            $whole_day=json_encode($whole_day);
-            $title=json_encode($title);
-            $description=json_encode($description);
-            $idcalendar=json_encode($idcalendar);
-            $str .= "{\"id\":$idevent,\"start\":$dateStart,\"end\":$dateFinish,\"whole_day\":$whole_day,\"title\":$title,\"description\":$description,\"idcalendar\":$idcalendar},"; 
+            $idevent = $event->idevent;
+            $dateStart = $event->dateStart;
+            $dateFinish = $event->dateFinish;
+            $whole_day = $event->whole_day;
+            $title = $event->title;
+            $description = $event->description;
+            $idcalendar = $event->idcalendar;
+            $idevent = json_encode($idevent);
+            $dateStart = json_encode($dateStart);
+            $dateFinish = json_encode($dateFinish);
+            $whole_day = json_encode($whole_day);
+            $title = json_encode($title);
+            $description = json_encode($description);
+            $idcalendar = json_encode($idcalendar);
+            $str .= "{\"id\":$idevent,\"start\":$dateStart,\"end\":$dateFinish,\"whole_day\":$whole_day,\"title\":$title,\"description\":$description,\"idcalendar\":$idcalendar},";
         }
-        if($str !== "")
-            $str = substr($str,0,strlen($str)-1);
+        if ($str !== "")
+            $str = substr($str, 0, strlen($str) - 1);
         echo "[$str]";
+    }
+
+    public function remove_event_ajax() {
+        if (isset($_POST['confirm'])) {
+            $idevent = $_POST["idevent"];
+            Event::delete_event($idevent);
+        }
     }
 
 }

@@ -49,9 +49,9 @@ class User extends Model {
         $query = self::execute("SELECT * FROM user where email=?", array($mail));
         $data = $query->fetch();
         if ($query->rowCount() == 0) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -96,6 +96,15 @@ class User extends Model {
         $query = self::execute("SELECT pseudo FROM user where iduser=?", array($iduser));
         $data = $query->fetch();
         return $data["pseudo"];
+    }
+     public static function pseudo_exist($pseudo){
+         $query = self::execute("SELECT * FROM user where pseudo=?", array($pseudo));
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return true;
+        } else {
+            return false;
+        } 
     }
 
     public function get_userShare($idcalendar) {

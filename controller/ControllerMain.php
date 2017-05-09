@@ -13,6 +13,26 @@ class ControllerMain extends Controller {
             (new View("index"))->show();
         }
     }
+    public function pseudo_available_service() {
+        $res = "false";
+        if (isset($_POST["pseudo"]) && $_POST["pseudo"] !== "") {
+            $user = User::pseudo_exist($_POST["pseudo"]);
+            if ($user) {
+                $res = "true";
+            }
+        }
+        echo $res;
+    }
+     public function mail_available_service() {
+        $res = "false";
+        if (isset($_POST["email"]) && $_POST["email"] !== "") {
+            $user = User::mail_exists($_POST["email"]);
+            if ($user) {
+                $res = "true";
+            }
+        }
+        echo $res;
+    }
 
     public function login() {
         $pseudo = '';

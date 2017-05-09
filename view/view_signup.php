@@ -6,6 +6,110 @@
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+        <script src="lib/lib/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="lib/lib/jquery-validation-1.16.0/jquery.validate.min.js" type="text/javascript"></script>
+        <script>
+            $.validator.addMethod("regex", function (value, element, pattern) {
+                if (pattern instanceof Array) {
+                    for (p of pattern) {
+                        if (!p.test(value))
+                            return false;
+                    }
+                    return true;
+                } else {
+                    return pattern.test(value);
+                }
+            },
+                    "Please enter a valid input.");
+
+            $(function () {
+                $('#signupForm').validate({
+                    rules: {
+                        pseudo: {
+                            remote: {
+                                url: 'main/pseudo_available_service',
+                                type: 'post',
+                                data: {
+                                    pseudo: function () {
+                                        return $("#pseudo").val();
+                                    }
+                                }
+                            },
+                            regex: /^[a-zA-Z][a-zA-Z0-9]*$/,
+                            required: true,
+                            minlength: 3,
+                            maxlength: 16,
+                        },
+                        password: {
+                            required: true,
+                            minlength: 8,
+                            maxlength: 16,
+                            regex: [/[A-Z]/, /\d/, /['";:,.\/?\\-]/]
+                        },
+                        password_confirm: {
+                            required: true,
+                            minlength: 8,
+                            maxlength: 16,
+                            equalTo: "#password",
+                            regex: [/[A-Z]/, /\d/, /['";:,.\/?\\-]/]
+                        },
+                        email: {
+                            remote: {
+                                url: 'main/mail_available_service',
+                                type: 'post',
+                                data: {
+                                    mail: function () {
+                                        return $("#email").val();
+                                    }
+                                }
+                            },
+                            required: true,
+                            regex: [/@/]
+                        },
+                        fullname: {
+                            required: true,
+                            minlength: 3,
+                            maxlength: 16,
+                            regex: /^[a-zA-Z][a-zA-Z0-9]*$/,
+                        }
+                    },
+                    messages: {
+                        pseudo: {
+                            remote: 'this pseudo is already taken',
+                            required: 'required',
+                            minlength: 'minimum 3 characters',
+                            maxlength: 'maximum 16 characters',
+                            regex: 'bad format for pseudo'
+                        },
+                        password: {
+                            required: 'required',
+                            minlength: 'minimum 8 characters',
+                            maxlength: 'maximum 16 characters',
+                            regex: 'bad password format'
+                        },
+                        password_confirm: {
+                            required: 'required',
+                            minlength: 'minimum 8 characters',
+                            maxlength: 'maximum 16 characters',
+                            equalTo: 'must be identical to password above',
+                            regex: 'bad password format'
+                        },
+                        email: {
+                            remote: 'this email is already taken',
+                            regex: 'bad e-mail format '
+                        },
+                        fullname: {
+                            minlength: 'minimum 3 characters',
+                            maxlength: 'maximum 16 characters',
+                            regex: 'bad format for fullname'
+
+                        }
+                    }
+                });
+                $("input:text:first").focus();
+            }
+            );
+        </script>
     </head>
     <body>
         <div class="title">Sign Up</div>
@@ -42,7 +146,7 @@
                         <td>Fullname:</td>
                         <td><input id="fullname" name="fullname" type="text" size="16" value="<?= $fullname ?>"></td>
                         <td class="errors" id="errName"></td>
-                    
+
                 </table>
                 <input id="btn" type="submit" value="Sign Up">
             </form>

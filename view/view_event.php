@@ -12,12 +12,12 @@
         <link href="lib/lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.theme.min.css" rel="stylesheet" type="text/css"/>
         <link href="lib/lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
         <script src='lib/lib/moment.min.js'></script>
-       
+
         <script src="lib/lib/jquery-3.1.1.min.js" type="text/javascript"></script>
         <script src="lib/lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.min.js" type="text/javascript"></script>
         <script src='lib/fullcalendar.min.js'></script>
-       
-        
+
+
         <script>
             $(document).ready(function () {
                 $('#calendar').fullCalendar({
@@ -26,20 +26,60 @@
                         center: 'title',
                         right: 'month,basicWeek,basicDay'
 
-                    }, 
+                    },
                     events: "Event/get_events_json",
-                    eventClick:function(event,jsEvent,view){
+                    eventClick: function (event, jsEvent, view) {
                         $('#confirmDialog').dialog({
                             resizable: false,
-                    height: 300,
-                    width: 500,
-                    modal: true,
-                    autoOpen: true
+                            height: 800,
+                            width: 600,
+                            modal: true,
+                            autoOpen: true,
+                            buttons: {
+                                Confirm: function () {
+                                    ret = "delete";
+                                    deleteEvent(event.id);
+                                    $(this).dialog("close");
+                                },
+                                Cancel: function () {
+                                    ret = "cancel";
+                                    $(this).dialog("close");
+                                },
+                                Edit: function(){
+                                    ret = "update";
+                                   updateEvent(event);
+                                }
+                            }
                         });
                     }
-                    
+
                 });
             });
+
+            function deleteEvent(id) {
+                $.post("Event/remove_event_ajax/",
+                    {"idevent": id,"confirm":"true"}
+                ).done(function(){
+                    $('#calendar').fullCalendar( 'refetchEvents' );
+                }
+                ).fail(function(){
+                    alert("<tr><td>Error encountered while retrieving the messages!</td></tr>");
+                    
+                });
+            }
+            function updateEvent(event) {
+                window.location = "event/edit/"+event.id;
+                /*$.post("Event/edit/",
+                        {"idevent": event.id,"update":"true"}
+                ).done(function(){
+                    $('#calendar').fullCalendar( 'refetchEvents' );
+                }
+                ).fail(function(){
+                    alert("<tr><td>Error encountered while retrieving the messages!</td></tr>");
+                    
+                });*/
+            }
+            
 
 
         </script>
@@ -88,7 +128,7 @@
                             <?php endif; ?>  
                             <label class="viewEvent" style="color:#<?= $events[$i]->get_color() ?>">  <?= $events[$i]->title ?></label>
 
-                            <form  class="viewEvent"  action="event/edit" method="post">
+                            <form  class="viewEvent"  action="event/edit/<?= $events[$i]->idevent ?>" method="post">
                                 <input type='hidden' name="idevent" value='<?= $events[$i]->idevent ?>'><input  id="edit" type="submit" name="update" value="Edit">
                             </form><br>
 
@@ -103,7 +143,7 @@
 
             <form id="newEvent" action="event/create" method="post"><input  id="edit" type="submit" name="create" value="Add"></form>
         </div>
-        <div id="confirmDialog" title="Attention" hidden>
+        <div id="confirmDialog"  hidden>
             
         </div>
     </body>
