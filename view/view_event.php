@@ -20,6 +20,7 @@
 
         <script>
             $(document).ready(function () {
+                $('#php').hide();
                 $('#calendar').fullCalendar({
                     header: {
                         left: 'prev,next today',
@@ -86,9 +87,13 @@
     </head>
 
     <body>
-        <div class="title">My Planning</div>
+      
+        <div class="title" >My Planning</div>
         <?php include('menu.html'); ?>
-        <div class="main" id="calendar" >
+        
+        <div class="main" id="calendar" ></div>
+        <form id="newEvent" action="event/create" method="post"><input  id="edit" type="submit" name="create" value="Add"></form>
+        <div class="main" id="php" >
             <div class="alignEvent" name="header">
                 <form class="formcalendar" id="previous" action="event/index" method="post">
                     <input type='hidden' name="annee" value='<?= $annee ?>'>

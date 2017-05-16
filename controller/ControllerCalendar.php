@@ -24,12 +24,14 @@ class ControllerCalendar extends Controller {
         $user=$this->get_user_or_redirect();
         if (isset($_POST["editcalendar"])) {
             $idcalendar = $_GET["id"];
-            if ((isset($_POST['description']) == '' || isset($_POST['description'])) && isset($_POST['color'])) {
-                $color = $_POST['color'];
-                $description = $_POST['description'];
-                $calendar = new Calendar($description, $color, $user->iduser, $idcalendar);
-                $user->update_calendar($calendar);
-                $this->redirect("calendar");
+            
+                if ((isset($_POST['description']) == '' || isset($_POST['description'])) && isset($_POST['color'])) {
+                    $color = $_POST['color'];
+                    $description = $_POST['description'];
+                    $calendar = new Calendar($description, $color, $user->iduser, $idcalendar);
+                    $user->update_calendar($calendar);
+                    $this->redirect("calendar");
+              
             }
         }
     }
@@ -67,5 +69,15 @@ class ControllerCalendar extends Controller {
             $this->redirect("calendar");
         }
     }
-
+     public function remove_calendar_ajax() {
+         $user=$this->get_user_or_redirect();
+        if (isset($_POST['confirm'])) {
+            $idcalendar = $_POST["idcalendar"];
+            $calendar=Calendar::get_calendar($idcalendar);
+            if(Calendar::it_is_my_calendar($user, $calendar->idcalendar)){
+                $calendar->delete();
+            }
+            
+        }
+    }
 }
