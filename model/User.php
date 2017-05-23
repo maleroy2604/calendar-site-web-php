@@ -164,6 +164,10 @@ class User extends Model {
     public function get_events() {
         return Event::get_events($this,$this->get_idcalendars_Shares());
     }
+//    public function get_events_date($start,$end){
+//        return Event::get_events_date($this,$this->get_idcalendars_Shares(),$start,$end);
+//        
+//    }
     public function get_allcalendars_ro(){
         return Calendar::get_calendars_and_calendar_share_ro($this,Share::get_idcalendars_ro($this));
     }

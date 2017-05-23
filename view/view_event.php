@@ -28,7 +28,10 @@
                         right: 'month,basicWeek,basicDay'
 
                     },
-                    events: "Event/get_events_json",
+                    events: {
+                        url: "Event/get_events_json",
+                        type: 'POST'
+                    },
                     eventClick: function (event, jsEvent, view) {
                         $('#confirmDialog').dialog({
                             resizable: false,

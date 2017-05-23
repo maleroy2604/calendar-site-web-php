@@ -57,6 +57,7 @@ class Event extends Model {
         foreach ($data as $row) {
             $events[] = new Event($row['idevent'], $row['start'], $row['finish'], $row['whole_day'], $row['title'], $row['description'], $row['idcalendar']);
         }
+        
   
         foreach ($idcalendars as $idcalendar) {
             $query1 = self::execute("SELECT * FROM event where idcalendar=?", array($idcalendar));
@@ -68,7 +69,25 @@ class Event extends Model {
 
         return $events;
     }
+//    public static function get_events_date($user, $idcalendars,$start,$end) {
+//        $query = self::execute("SELECT * FROM event where start=? AND finish=? AND idcalendar in (SELECT  idcalendar FROM calendar where iduser=? )", array($start,$end,$user->iduser));
+//        $data = $query->fetchAll();
+//        $events = [];
+//        foreach ($data as $row) {
+//            $events[] = new Event($row['idevent'], $row['start'], $row['finish'], $row['whole_day'], $row['title'], $row['description'], $row['idcalendar']);
+//        }
+//        
+//  
+//        foreach ($idcalendars as $idcalendar) {
+//            $query1 = self::execute("SELECT * FROM event where idcalendar=? AND start=? AND finish=?", array($idcalendar,$start,$end));
+//            $rows = $query1->fetchAll();
+//            foreach ($rows as $row) {
+//                $events[] = new Event($row['idevent'], $row['start'], $row['finish'], $row['whole_day'], $row['title'], $row['description'], $row['idcalendar']);
+//            }
+//        }
 
+//        return $events;
+//    }
     public static function delete_event($idevent) {
         self::execute("DELETE from event where idevent=?", array($idevent));
         return true;

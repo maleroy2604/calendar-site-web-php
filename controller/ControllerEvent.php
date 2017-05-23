@@ -209,6 +209,7 @@ class ControllerEvent extends Controller {
     public function get_events_json() {
         $str = "";
         $user = $this->get_user_or_redirect();
+//        $events = $user->get_events_date($_POST['start'],$_POST['end']);
         $events = $user->get_events();
         foreach ($events as $event) {
 
