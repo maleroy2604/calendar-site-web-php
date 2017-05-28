@@ -64,7 +64,7 @@
                                 }
                             },
                             required: true,
-                            regex: [/@/]
+                            regex: [/@/,/[A-Z]/,/\d/, /[_.\/?\\-]/]
                         },
                         fullname: {
                             required: true,

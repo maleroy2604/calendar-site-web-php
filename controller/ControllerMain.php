@@ -33,6 +33,18 @@ class ControllerMain extends Controller {
         }
         echo $res;
     }
+     public function pseudo_Exist_service() {
+          $res = "true";
+         if (isset($_POST["pseudo"]) && $_POST["pseudo"] !== "") {
+            $user = User::pseudo_exist($_POST["pseudo"]);
+            if ($user) {
+                $res = "false";
+            }
+        }
+        echo $res;
+     }
+    
+     
 
     public function login() {
         $pseudo = '';

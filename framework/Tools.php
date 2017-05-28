@@ -46,8 +46,10 @@ class Tools {
     }
 
     public static function dateHtml($date) {
-        $datehtml = substr_replace($date, "T", 10, 1);
-        return $datehtml;
+        return substr($date,0, 10);
+    }
+    public static function heureHtml($time){
+        return substr($time, 11);
     }
 
 }

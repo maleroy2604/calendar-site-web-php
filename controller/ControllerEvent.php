@@ -37,18 +37,25 @@ class ControllerEvent extends Controller {
     }
 
     public function add() {
+        date_default_timezone_set('UTC');
         $this->get_user_or_redirect();
         if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST["calendar"]) && isset($_POST['start']) && isset($_POST['finish'])) {
             if (isset($_POST['wholeday'])) {
                 $wholeday = 1;
+                 $start=$_POST['start'];
+                 $finish=$_POST['finish'];
             } else {
                 $wholeday = 0;
+                if(isset($_POST['startTime']) && isset($_POST['finishTime']) ){
+                     $start =$_POST['start']."T".$_POST['startTime'];
+                    $finish = $_POST['finish']."T".$_POST['finishTime'];
+                }
             }
             $title = trim($_POST['title']);
             $description = $_POST['description'];
             $idcalendar = $_POST['calendar'];
-            $start = str_replace("T", " ", $_POST['start']);
-            $finish = str_replace("T", " ", $_POST['finish']);
+//            $start =$_POST['start']."T".$_POST['startTime'];
+//            $finish = $_POST['finish']."T".$_POST['finishTime'];
             $errors = Event::validate($start, $finish, $title, $description);
             if (count($errors) == 0) {
                 $event = new Event(-1, $start, $finish, $wholeday, $title, $description, $idcalendar);
@@ -60,28 +67,7 @@ class ControllerEvent extends Controller {
         }
     }
 
-//    public function edit() {
-//        $user = $this->get_user_or_redirect();
-//        if (isset($_POST["update"])) {
-//            $idevent = $_POST["idevent"];
-//            $errors = [];
-//            $event = Event::get_event($idevent);
-//            $idcalendar = $event->idcalendar;
-//            if (!Calendar::it_is_my_calendar($user, $idcalendar)) {
-//                $shareEvent = Share::get_share($idcalendar);
-//                if ($shareEvent->read_only == 0) {
-//                    $errors[] = "cette evenement est en lecture seule";
-//                }
-//            }
-//            $calendars = $user->get_allcalendars_ro();
-//            if (count($errors) == 0) {
-//                $event = Event::get_event($idevent);
-//                (new View("update"))->show(array("calendars" => $calendars, "event" => $event));
-//            } else {
-//                (new View("error"))->show(array("errors" => $errors));
-//            }
-//        }
-//    }
+
     
     public function edit() {
         $user = $this->get_user_or_redirect();
@@ -118,8 +104,8 @@ class ControllerEvent extends Controller {
             $idcalendar = $_POST['idcalendar'];
             $title = trim($_POST['title']);
             $description = $_POST['description'];
-            $start = str_replace("T", " ", $_POST['start']);
-            $finish = str_replace("T", " ", $_POST['finish']);
+            $start =$_POST['start']."T".$_POST['startTime'];
+            $finish = $_POST['finish']."T".$_POST['finishTime'];
             $errors = Event::validate($start, $finish, $title, $description);
             if (count($errors) == 0) {
                 $this->updateEvent($event = new Event($idevent, $start, $finish, $wholeday, $title, $description, $idcalendar));

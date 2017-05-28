@@ -11,8 +11,10 @@
         <link href="lib/lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
         <script src="lib/lib/jquery-3.1.1.min.js" type="text/javascript"></script>
         <script src="lib/lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="lib/lib/jquery-validation-1.16.0/jquery.validate.min.js" type="text/javascript"></script>
         <script>
             $(function () {
+                
                 var idcalendar=null;
                 $(".description").dblclick(function () {
                     var idcalendar=$(this).attr("idcal");
@@ -40,6 +42,24 @@
                         }
                     });
                 });
+                $('#calendar_id').validate({
+                   rules: {
+                    
+                            description: {
+                                required: true,
+                                maxlength: 30,
+                            },
+                        },
+                      messages: {
+                        description: {
+                            maxlength: 'maximum 30 caractères !',
+                            required: 'required',
+                           
+                        },
+                    }
+                  
+                    });
+                
             })
 
 
@@ -68,7 +88,7 @@
                     <input type='submit' value='Edit' name="editcalendar">
                 </form>
                 <form  class="formcalendar" action="calendar/delete/<?= $calendar->idcalendar ?>" method="post">
-                    <input type='submit'name="delcalendar" value='Delete'> 
+                    <input id="delbtn" type='submit'name="delcalendar" value='Delete'> 
                 </form>
                 <form class="formcalendar" action="share/index/" method="post">
                     <input type='hidden' name="idcalendar" value="<?= $calendar->idcalendar ?>">
@@ -86,7 +106,7 @@
             <?php endforeach; ?>
 
             <form class="formcalendar" id="calendar_id" action="calendar/add" method="post">
-                <input  type="text" name="description" >
+                <input id="description" type="text" name="description" >
                 <input  type="color" name="color" >
                 <input  type='submit' name="addcalendar" value='Add'>
             </form>
